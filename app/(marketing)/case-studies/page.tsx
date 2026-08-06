@@ -26,6 +26,12 @@ export default async function CaseStudiesPage() {
           How research-led positioning decisions turned into rank and revenue —
           every launch, start to finish.
         </p>
+        <Link
+          href="/#book-a-call"
+          className="btn-primary mt-8 inline-flex px-7 py-3.5 text-[.9rem] !text-bg"
+        >
+          Book a Strategy Call <span className="arrow">→</span>
+        </Link>
       </div>
 
       <div className="mx-auto max-w-[1180px] px-6 py-20">

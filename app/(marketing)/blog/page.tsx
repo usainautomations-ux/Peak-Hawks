@@ -26,6 +26,12 @@ export default async function BlogPage() {
               Product research, PPC strategy, launch playbooks and case studies
               from the PeakHawks team.
             </p>
+            <Link
+              href="/#book-a-call"
+              className="btn-primary mt-8 inline-flex px-7 py-3.5 text-[.9rem] !text-bg"
+            >
+              Book a Strategy Call <span className="arrow">→</span>
+            </Link>
           </div>
 
           <div className="mx-auto max-w-[1180px] px-6 py-20">
