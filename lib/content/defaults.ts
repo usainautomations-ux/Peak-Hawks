@@ -44,10 +44,17 @@ export type SectionIntro = {
 /** The thin cross-link strip pinned above the hero. */
 export type TopBanner = { text: string; linkLabel: string; linkHref: string };
 
-/** Case Studies heading — a SectionIntro plus the "View all" link. */
+/** Case Studies heading — a SectionIntro plus the "View all" link, plus the
+ * three summary-strip labels ("Positioning" / "Angle" / "Competition")
+ * shown on every individual case study's own page. One shared set of
+ * labels rather than per-case-study, since they're column headers that
+ * should read the same across every launch. */
 export type CaseStudiesIntro = SectionIntro & {
   linkLabel?: string;
   linkHref?: string;
+  positioningLabel?: string;
+  angleLabel?: string;
+  competitionLabel?: string;
 };
 
 /** Book A Call heading block, including the numbered checklist. */
@@ -408,6 +415,9 @@ export const defaultContent: SiteContent = {
       "How research-led positioning decisions turned into rank and revenue \u2014 swap in your client's real launches here.",
     linkLabel: "View All Case Studies \u2192",
     linkHref: "/case-studies",
+    positioningLabel: "Positioning",
+    angleLabel: "Angle",
+    competitionLabel: "Competition",
   },
   caseStudies: [
     {

@@ -51,7 +51,7 @@ const PAGE_PROJECTION = `{
     outcomeLabel, outcome, outcomeIcon,
     "image": image.asset->url
   },
-  caseStudiesIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead, linkLabel, linkHref },
+  caseStudiesIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead, linkLabel, linkHref, positioningLabel, angleLabel, competitionLabel },
   servicesIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   services[] { title, body },
   processIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },

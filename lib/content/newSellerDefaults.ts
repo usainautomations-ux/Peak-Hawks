@@ -182,6 +182,9 @@ export const newSellerDefaults: SiteContent = {
       "Real first products \u2014 what the research said, what we changed, and where they landed.",
     linkLabel: "View All Case Studies \u2192",
     linkHref: "/case-studies",
+    positioningLabel: "Positioning",
+    angleLabel: "Angle",
+    competitionLabel: "Competition",
   },
   caseStudies: [
     {

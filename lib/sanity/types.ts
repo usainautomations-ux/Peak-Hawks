@@ -84,7 +84,13 @@ export type SanityPageContent = {
     outcomeIcon?: "growth" | "target" | "check" | "spark";
     image?: string;
   }>;
-  caseStudiesIntro?: SanitySectionIntro & { linkLabel?: string; linkHref?: string };
+  caseStudiesIntro?: SanitySectionIntro & {
+    linkLabel?: string;
+    linkHref?: string;
+    positioningLabel?: string;
+    angleLabel?: string;
+    competitionLabel?: string;
+  };
   servicesIntro?: SanitySectionIntro;
   services?: Array<{ title: string; body: string }>;
   processIntro?: SanitySectionIntro;

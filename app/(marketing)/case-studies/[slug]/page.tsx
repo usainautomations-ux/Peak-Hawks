@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
 import { getMergedCaseStudy, getAllMergedCaseStudySlugs } from "@/lib/content/caseStudyMerged";
+import { getMergedContent } from "@/lib/content/merged";
 import { caseStudyPortableTextComponents } from "@/components/PortableTextRenderer";
 
 export const dynamic = "force-dynamic"; // always fetch fresh from Sanity, no caching
@@ -39,13 +40,21 @@ export default async function CaseStudyPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const cs = await getMergedCaseStudy(slug);
+  // The three summary-strip labels below live on the Homepage's Case
+  // Studies tab in Sanity (shared across every case study, same pattern
+  // as Testimonials/Book A Call on the Case Studies listing page) — so
+  // this fetch pulls in that shared content alongside the study itself.
+  const [cs, content] = await Promise.all([
+    getMergedCaseStudy(slug),
+    getMergedContent(),
+  ]);
   if (!cs) notFound();
 
+  const { positioningLabel, angleLabel, competitionLabel } = content.caseStudiesIntro;
   const summaryRows: [string, string][] = [
-    ["Positioning", cs.positioning],
-    ["Angle", cs.angle],
-    ["Competition", cs.competition],
+    [positioningLabel || "Positioning", cs.positioning],
+    [angleLabel || "Angle", cs.angle],
+    [competitionLabel || "Competition", cs.competition],
   ].filter(([, v]) => Boolean(v)) as [string, string][];
 
   return (
@@ -93,7 +102,7 @@ export default async function CaseStudyPage({
           <dl className="mb-10 grid gap-0 overflow-hidden rounded-[14px] border border-line sm:grid-cols-3">
             {summaryRows.map(([k, v], i) => (
               <div
-                key={k}
+                key={`${i}-${k}`}
                 className={[
                   "p-5",
                   i > 0 ? "border-t border-line sm:border-l sm:border-t-0" : "",

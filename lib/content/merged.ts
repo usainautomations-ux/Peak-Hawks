@@ -174,6 +174,14 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
       ...overlayIntro(base.caseStudiesIntro, sanity.caseStudiesIntro),
       linkLabel: sanity.caseStudiesIntro?.linkLabel ?? base.caseStudiesIntro.linkLabel,
       linkHref: sanity.caseStudiesIntro?.linkHref ?? base.caseStudiesIntro.linkHref,
+      positioningLabel:
+        sanity.caseStudiesIntro?.positioningLabel?.trim() ||
+        base.caseStudiesIntro.positioningLabel,
+      angleLabel:
+        sanity.caseStudiesIntro?.angleLabel?.trim() || base.caseStudiesIntro.angleLabel,
+      competitionLabel:
+        sanity.caseStudiesIntro?.competitionLabel?.trim() ||
+        base.caseStudiesIntro.competitionLabel,
     },
     caseStudies: base.caseStudies, // placeholder — overwritten by the caller with featured case studies
     servicesIntro: overlayIntro(base.servicesIntro, sanity.servicesIntro),

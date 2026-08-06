@@ -398,6 +398,16 @@ export const pageContent = {
           description: 'e.g. "View All Case Studies \u2192". Leave blank to hide the link.' },
         { name: "linkHref", title: "\"View all\" link destination", type: "string",
           description: 'Defaults to "/case-studies".' },
+        { name: "positioningLabel", title: "Summary strip — \"Positioning\" label", type: "string",
+          description:
+            'The first of the three column headers shown on every individual case ' +
+            'study\'s own page \u2014 the box that reads "Positioning" above the ' +
+            'positioning insight text. Applies to every case study; leave blank to ' +
+            'keep "Positioning".' },
+        { name: "angleLabel", title: "Summary strip — \"Angle\" label", type: "string",
+          description: 'The second column header. Leave blank to keep "Angle".' },
+        { name: "competitionLabel", title: "Summary strip — \"Competition\" label", type: "string",
+          description: 'The third column header. Leave blank to keep "Competition".' },
       ],
     }),
 
