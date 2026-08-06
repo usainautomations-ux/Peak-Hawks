@@ -12,11 +12,22 @@ import { SecMeta } from "@/components/SecMeta";
  * Sanity → "Book A Call". The checklist numbers itself, so steps can be
  * added or removed freely.
  */
-export function BookACall({ intro }: { intro: BookIntro }) {
+export function BookACall({
+  intro,
+  hideMeta = false,
+}: {
+  intro: BookIntro;
+  /** Hides the "SEC.0X // Contact — ALT ... FT" strip above the heading.
+   * Used on the Case Studies page — see the matching note in
+   * Testimonials.tsx for why. */
+  hideMeta?: boolean;
+}) {
   return (
     <section id="book-a-call" className="py-20 lg:py-[110px]">
       <div className="mx-auto max-w-[1180px] px-6">
-        <SecMeta num={8} label={intro.sectionLabel || "Contact"} />
+        {!hideMeta && (
+          <SecMeta num={intro.sectionNumber ?? 8} label={intro.sectionLabel || "Contact"} />
+        )}
         <Reveal
           data-dropdown-boundary
           className="relative grid gap-10 rounded-3xl border border-line-strong p-6 sm:gap-14 sm:p-14 lg:grid-cols-[1fr_1.15fr] [background:radial-gradient(600px_280px_at_85%_-10%,rgba(234,92,0,.13),transparent_60%),#FFFFFF]"

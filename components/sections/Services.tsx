@@ -19,7 +19,7 @@ export function Services({ items, intro }: { items: Service[]; intro: SectionInt
   return (
     <section id="services" className="bg-surface py-20 lg:py-[110px]">
       <div className="mx-auto max-w-[1180px] px-6">
-        <SecMeta num={5} label={intro.sectionLabel || "Services"} />
+        <SecMeta num={intro.sectionNumber ?? 5} label={intro.sectionLabel || "Services"} />
         <Reveal className="mb-14 max-w-[640px]">
           {intro.eyebrow ? <Eyebrow>{intro.eyebrow}</Eyebrow> : null}
           <h2>

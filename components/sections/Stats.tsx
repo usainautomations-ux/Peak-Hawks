@@ -21,7 +21,7 @@ export function Stats({ items, intro }: { items: Stat[]; intro: SectionIntro }) 
       className="border-y border-white/10 bg-[radial-gradient(700px_300px_at_50%_0%,rgba(234,92,0,.06),transparent_70%)] bg-[#15171A]"
     >
       <div className="mx-auto max-w-[1180px] px-6 pt-9">
-        <SecMeta num={3} label={intro.sectionLabel || "Proof"} dark />
+        <SecMeta num={intro.sectionNumber ?? 3} label={intro.sectionLabel || "Proof"} dark />
         {intro.heading ? (
           <div className="mx-auto mb-10 max-w-[640px] text-center">
             {intro.eyebrow ? (

@@ -34,6 +34,11 @@ export type SectionIntro = {
   headingAccent?: string;
   subhead?: string;
   subheadAccent?: string;
+  /** The number shown as "SEC.0X" above the section, and used to
+   * calculate the "ALT ... FT" reading next to it (altitude = this
+   * number × 3,200 ft — see components/SecMeta.tsx). Optional: falls
+   * back to whichever number that section has always used. */
+  sectionNumber?: number;
 };
 
 /** The thin cross-link strip pinned above the hero. */
@@ -53,6 +58,8 @@ export type BookIntro = {
   headingAccent?: string;
   body: string;
   steps: string[];
+  /** See SectionIntro.sectionNumber above — same field, same purpose. */
+  sectionNumber?: number;
 };
 
 /** The final dark call-to-action band above the footer. */
@@ -86,6 +93,8 @@ export type Problem = {
 export type ProblemsIntro = {
   /** The small "SEC.01 // DIAGNOSIS" flight strip above the section. */
   sectionLabel?: string;
+  /** See SectionIntro.sectionNumber — same field, same purpose. */
+  sectionNumber?: number;
   eyebrow: string;
   eyebrowIcon?: string;
   heading: string;
@@ -143,6 +152,8 @@ export type WhyUsRow = {
 export type WhyUsIntro = {
   /** The small "SEC.02 // CAPABILITY" flight strip above the section. */
   sectionLabel?: string;
+  /** See SectionIntro.sectionNumber — same field, same purpose. */
+  sectionNumber?: number;
   eyebrow: string;
   heading: string;
   /** Optional paragraph under the heading. */
@@ -244,6 +255,7 @@ export const defaultContent: SiteContent = {
   },
   statsIntro: {
     sectionLabel: "Proof",
+    sectionNumber: 3,
     eyebrow: "",
     heading: "",
     headingAccent: "",
@@ -272,6 +284,7 @@ export const defaultContent: SiteContent = {
   ],
   problemsIntro: {
     sectionLabel: "Diagnosis",
+    sectionNumber: 1,
     eyebrow: "Diagnosis",
     eyebrowIcon: "activity",
     heading: "Most Amazon Brands Don't Plateau By Accident.",
@@ -337,6 +350,7 @@ export const defaultContent: SiteContent = {
   ],
   whyUsIntro: {
     sectionLabel: "Capability",
+    sectionNumber: 2,
     eyebrow: "Full-Service, Product-First",
     heading: "One Agency. The Whole Growth Loop.",
     headingAccent: "Growth Loop.",
@@ -386,6 +400,7 @@ export const defaultContent: SiteContent = {
   ],
   caseStudiesIntro: {
     sectionLabel: "Launches",
+    sectionNumber: 4,
     eyebrow: "Proof of Work",
     heading: "Amazon Product Launch Case Studies",
     headingAccent: "Case Studies",
@@ -425,6 +440,7 @@ export const defaultContent: SiteContent = {
   ],
   servicesIntro: {
     sectionLabel: "Services",
+    sectionNumber: 5,
     eyebrow: "Amazon Agency Services",
     heading: "Everything a Launch Needs, Under One Roof",
     headingAccent: "Under One Roof",
@@ -453,6 +469,7 @@ export const defaultContent: SiteContent = {
   ],
   processIntro: {
     sectionLabel: "Flight Path",
+    sectionNumber: 6,
     eyebrow: "Our Amazon Launch Process",
     heading: "How a Launch Takes Off",
     headingAccent: "Takes Off",
@@ -481,6 +498,7 @@ export const defaultContent: SiteContent = {
   ],
   testimonialsIntro: {
     sectionLabel: "Clients",
+    sectionNumber: 7,
     eyebrow: "Real Voices, Real Results",
     heading: "What Our Clients Are Saying",
     headingAccent: "Are Saying",
@@ -510,6 +528,7 @@ export const defaultContent: SiteContent = {
   ],
   bookIntro: {
     sectionLabel: "Contact",
+    sectionNumber: 8,
     eyebrow: "Simple, Fast Onboarding",
     heading: "One Call. No Endless Forms.",
     headingAccent: "",
@@ -522,6 +541,7 @@ export const defaultContent: SiteContent = {
   },
   faqIntro: {
     sectionLabel: "Questions",
+    sectionNumber: 9,
     eyebrow: "Have Questions?",
     heading: "Frequently Asked Questions",
     headingAccent: "Questions",

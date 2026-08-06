@@ -3,6 +3,7 @@ import type { PortableTextBlock } from "@portabletext/react";
 /** The shared heading block every section uses. */
 export type SanitySectionIntro = {
   sectionLabel?: string;
+  sectionNumber?: number;
   eyebrow?: string;
   heading?: string;
   headingAccent?: string;
@@ -31,6 +32,7 @@ export type SanityPageContent = {
   brandLogos?: Array<string | { name?: string; logo?: string }>;
   problemsIntro?: {
     sectionLabel?: string;
+    sectionNumber?: number;
     eyebrow?: string;
     eyebrowIcon?: string;
     heading?: string;
@@ -66,6 +68,7 @@ export type SanityPageContent = {
   }>;
   whyUsIntro?: {
     sectionLabel?: string;
+    sectionNumber?: number;
     eyebrow?: string;
     heading?: string;
     headingAccent?: string;
@@ -97,6 +100,7 @@ export type SanityPageContent = {
   }>;
   bookIntro?: {
     sectionLabel?: string;
+    sectionNumber?: number;
     eyebrow?: string;
     heading?: string;
     headingAccent?: string;

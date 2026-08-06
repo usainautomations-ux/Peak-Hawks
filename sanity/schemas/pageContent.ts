@@ -40,7 +40,7 @@ function sectionIntro(opts: {
   const include = opts.include ?? ["sectionLabel", "eyebrow", "heading", "subhead"];
   const fields: any[] = [];
 
-  if (include.includes("sectionLabel"))
+  if (include.includes("sectionLabel")) {
     fields.push({
       name: "sectionLabel",
       title: "Section label",
@@ -48,6 +48,18 @@ function sectionIntro(opts: {
       description:
         'The small flight strip above the section, e.g. "SEC.01 // DIAGNOSIS" \u2014 you type just the word, e.g. "Diagnosis".',
     });
+    fields.push({
+      name: "sectionNumber",
+      title: "Section number (the \"SEC.0X\" part)",
+      type: "number",
+      description:
+        'The number in that same flight strip \u2014 "SEC.01", "SEC.02" and so on. ' +
+        "Also sets the \u201cALT ... FT\u201d reading next to it (altitude = this number \u00d7 " +
+        "3,200 ft \u2014 purely decorative, not something to configure separately). " +
+        "Leave blank to keep this section's usual number.",
+      validation: (R: any) => R.integer().positive(),
+    });
+  }
 
   if (include.includes("eyebrow"))
     fields.push({

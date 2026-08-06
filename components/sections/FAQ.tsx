@@ -13,7 +13,7 @@ export function FAQ({ items, intro }: { items: FAQItem[]; intro: SectionIntro })
   return (
     <section id="faq" className="pb-[110px]">
       <div className="mx-auto max-w-[1180px] px-6">
-        <SecMeta num={9} label={intro.sectionLabel || "Questions"} />
+        <SecMeta num={intro.sectionNumber ?? 9} label={intro.sectionLabel || "Questions"} />
         <Reveal className="mx-auto mb-14 max-w-[640px] text-center">
           {intro.eyebrow ? (
             <Eyebrow className="justify-center">{intro.eyebrow}</Eyebrow>

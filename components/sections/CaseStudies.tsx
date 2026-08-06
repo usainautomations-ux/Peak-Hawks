@@ -22,7 +22,7 @@ export function CaseStudies({
   return (
     <section id="case-studies" className="bg-[#15171A] py-20 lg:py-[110px]">
       <div className="mx-auto max-w-[1180px] px-6">
-        <SecMeta num={4} label={intro.sectionLabel || "Launches"} dark />
+        <SecMeta num={intro.sectionNumber ?? 4} label={intro.sectionLabel || "Launches"} dark />
         <Reveal className="mb-14 flex max-w-[900px] flex-wrap items-end justify-between gap-6">
           <div>
             {intro.eyebrow ? <Eyebrow>{intro.eyebrow}</Eyebrow> : null}

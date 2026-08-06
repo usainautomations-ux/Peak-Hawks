@@ -46,6 +46,7 @@ export const newSellerDefaults: SiteContent = {
   ],
   problemsIntro: {
     sectionLabel: "Diagnosis",
+    sectionNumber: 1,
     eyebrow: "Diagnosis",
     eyebrowIcon: "activity",
     heading: "Most First Launches Don't Fail By Accident.",
@@ -111,6 +112,7 @@ export const newSellerDefaults: SiteContent = {
   ],
   whyUsIntro: {
     sectionLabel: "Capability",
+    sectionNumber: 2,
     eyebrow: "Beginner-Friendly, Data-Led",
     heading: "One Agency. Your Whole First Launch.",
     headingAccent: "First Launch.",
@@ -159,6 +161,7 @@ export const newSellerDefaults: SiteContent = {
   ],
   statsIntro: {
     sectionLabel: "Proof",
+    sectionNumber: 3,
     eyebrow: "",
     heading: "",
     headingAccent: "",
@@ -171,6 +174,7 @@ export const newSellerDefaults: SiteContent = {
   ],
   caseStudiesIntro: {
     sectionLabel: "Launches",
+    sectionNumber: 4,
     eyebrow: "Proof of Work",
     heading: "First Launch Case Studies",
     headingAccent: "Case Studies",
@@ -210,6 +214,7 @@ export const newSellerDefaults: SiteContent = {
   ],
   servicesIntro: {
     sectionLabel: "Services",
+    sectionNumber: 5,
     eyebrow: "What's Included",
     heading: "Everything a First Launch Needs, Under One Roof",
     headingAccent: "Under One Roof",
@@ -238,6 +243,7 @@ export const newSellerDefaults: SiteContent = {
   ],
   processIntro: {
     sectionLabel: "Flight Path",
+    sectionNumber: 6,
     eyebrow: "Your First Launch, Step By Step",
     heading: "How a First Launch Takes Off",
     headingAccent: "Takes Off",
@@ -266,6 +272,7 @@ export const newSellerDefaults: SiteContent = {
   ],
   testimonialsIntro: {
     sectionLabel: "Clients",
+    sectionNumber: 7,
     eyebrow: "Real Voices, Real Results",
     heading: "What First-Time Sellers Say",
     headingAccent: "Sellers Say",
@@ -295,6 +302,7 @@ export const newSellerDefaults: SiteContent = {
   ],
   bookIntro: {
     sectionLabel: "Contact",
+    sectionNumber: 8,
     eyebrow: "Simple, Fast Onboarding",
     heading: "One Call. No Endless Forms.",
     headingAccent: "",
@@ -307,6 +315,7 @@ export const newSellerDefaults: SiteContent = {
   },
   faqIntro: {
     sectionLabel: "Questions",
+    sectionNumber: 9,
     eyebrow: "Have Questions?",
     heading: "Frequently Asked Questions",
     headingAccent: "Questions",

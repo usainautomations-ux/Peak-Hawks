@@ -66,7 +66,7 @@ export function Process({
   return (
     <section id="process" className="bg-[#15171A] py-20 lg:py-[110px]">
       <div className="mx-auto max-w-[1180px] px-6">
-        <SecMeta num={6} label={intro.sectionLabel || "Flight Path"} dark />
+        <SecMeta num={intro.sectionNumber ?? 6} label={intro.sectionLabel || "Flight Path"} dark />
         <div className="mx-auto mb-14 max-w-[640px] text-center">
           {intro.eyebrow ? (
             <Eyebrow className="justify-center">{intro.eyebrow}</Eyebrow>

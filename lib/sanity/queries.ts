@@ -23,7 +23,7 @@ const PAGE_PROJECTION = `{
     "posterImageMobile": posterImageMobile.asset->url,
     chips[] { value, label }
   },
-  statsIntro { sectionLabel, eyebrow, heading, headingAccent, subhead },
+  statsIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   stats[] { value, prefix, suffix, label },
   brandsIntro { sectionLabel, eyebrow, heading, headingAccent, subhead },
   brandLogos[] {
@@ -31,7 +31,7 @@ const PAGE_PROJECTION = `{
     "logo": logo.asset->url
   },
   problemsIntro {
-    sectionLabel, eyebrow, eyebrowIcon, heading, headingSub, headingAccent, subhead, subheadAccent
+    sectionLabel, sectionNumber, eyebrow, eyebrowIcon, heading, headingSub, headingAccent, subhead, subheadAccent
   },
   problems[] {
     number, category, title, body, badge, icon,
@@ -44,22 +44,22 @@ const PAGE_PROJECTION = `{
   problemsBanner[] {
     icon, "iconImage": iconImage.asset->url, value, text, textAccent
   },
-  whyUsIntro { sectionLabel, eyebrow, heading, headingAccent, subhead },
+  whyUsIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   whyUs[] {
     eyebrow, title, body,
     points,
     outcomeLabel, outcome, outcomeIcon,
     "image": image.asset->url
   },
-  caseStudiesIntro { sectionLabel, eyebrow, heading, headingAccent, subhead, linkLabel, linkHref },
-  servicesIntro { sectionLabel, eyebrow, heading, headingAccent, subhead },
+  caseStudiesIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead, linkLabel, linkHref },
+  servicesIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   services[] { title, body },
-  processIntro { sectionLabel, eyebrow, heading, headingAccent, subhead },
+  processIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   process[] { tag, title, body },
-  testimonialsIntro { sectionLabel, eyebrow, heading, headingAccent, subhead },
+  testimonialsIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   testimonials[] { quote, name, role, initials, rating, "avatar": avatar.asset->url },
-  bookIntro { sectionLabel, eyebrow, heading, headingAccent, body, steps },
-  faqIntro { sectionLabel, eyebrow, heading, headingAccent, subhead },
+  bookIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, body, steps },
+  faqIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   faq[] { q, a },
   cta { eyebrow, heading, headingAccent, sub, buttonLabel, buttonHref },
   contact { email }

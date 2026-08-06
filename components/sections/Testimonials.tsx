@@ -18,16 +18,25 @@ import { sanityThumb } from "@/lib/sanity/imageUrl";
 export function Testimonials({
   items,
   intro,
+  hideMeta = false,
 }: {
   items: Testimonial[];
   intro: SectionIntro;
+  /** Hides the "SEC.0X // Clients — ALT ... FT" strip above the heading.
+   * Used on the Case Studies page, which shows this section right after
+   * Case Studies (04) with nothing in between — "SEC.07" there looks
+   * like a broken sequence rather than a real 7th section. The homepage
+   * and New Sellers page, where the numbering is continuous, keep it. */
+  hideMeta?: boolean;
 }) {
   if (!items.length) return null;
 
   return (
     <section id="testimonials" className="bg-surface py-20 lg:py-[110px]">
       <div className="mx-auto max-w-[1180px] px-6">
-        <SecMeta num={7} label={intro.sectionLabel || "Clients"} />
+        {!hideMeta && (
+          <SecMeta num={intro.sectionNumber ?? 7} label={intro.sectionLabel || "Clients"} />
+        )}
         <Reveal className="mx-auto mb-14 max-w-[640px] text-center">
           {intro.eyebrow ? (
             <Eyebrow className="justify-center">{intro.eyebrow}</Eyebrow>

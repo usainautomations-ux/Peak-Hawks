@@ -72,7 +72,7 @@ export function WhyUs({ rows, intro }: { rows: WhyUsRow[]; intro: WhyUsIntro }) 
   return (
     <section id="why-us" className="bg-surface py-20 lg:py-[110px]">
       <div className="mx-auto max-w-[1220px] px-6">
-        <SecMeta num={2} label={intro.sectionLabel || "Capability"} />
+        <SecMeta num={intro.sectionNumber ?? 2} label={intro.sectionLabel || "Capability"} />
         <Reveal className="mb-16 max-w-[680px]">
           {intro.eyebrow ? <Eyebrow>{intro.eyebrow}</Eyebrow> : null}
           <h2>

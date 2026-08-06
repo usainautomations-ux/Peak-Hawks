@@ -21,6 +21,7 @@ function overlayIntro<T extends SectionIntro>(base: T, s?: SanitySectionIntro): 
   return {
     ...base,
     sectionLabel: pick(s.sectionLabel, base.sectionLabel) ?? "",
+    sectionNumber: s.sectionNumber ?? base.sectionNumber,
     eyebrow: pick(s.eyebrow, base.eyebrow) ?? "",
     heading: pick(s.heading, base.heading) ?? "",
     headingAccent: s.headingAccent ?? base.headingAccent,
@@ -118,6 +119,8 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
     problemsIntro: {
       sectionLabel:
         sanity.problemsIntro?.sectionLabel ?? base.problemsIntro.sectionLabel,
+      sectionNumber:
+        sanity.problemsIntro?.sectionNumber ?? base.problemsIntro.sectionNumber,
       eyebrow: sanity.problemsIntro?.eyebrow ?? base.problemsIntro.eyebrow,
       eyebrowIcon:
         sanity.problemsIntro?.eyebrowIcon ?? base.problemsIntro.eyebrowIcon,
@@ -147,6 +150,8 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
     whyUsIntro: {
       sectionLabel:
         sanity.whyUsIntro?.sectionLabel ?? base.whyUsIntro.sectionLabel,
+      sectionNumber:
+        sanity.whyUsIntro?.sectionNumber ?? base.whyUsIntro.sectionNumber,
       eyebrow: sanity.whyUsIntro?.eyebrow ?? base.whyUsIntro.eyebrow,
       heading: sanity.whyUsIntro?.heading ?? base.whyUsIntro.heading,
       headingAccent:
@@ -188,6 +193,7 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
       : base.testimonials,
     bookIntro: {
       sectionLabel: sanity.bookIntro?.sectionLabel ?? base.bookIntro.sectionLabel,
+      sectionNumber: sanity.bookIntro?.sectionNumber ?? base.bookIntro.sectionNumber,
       eyebrow: sanity.bookIntro?.eyebrow ?? base.bookIntro.eyebrow,
       heading: sanity.bookIntro?.heading ?? base.bookIntro.heading,
       headingAccent: sanity.bookIntro?.headingAccent ?? base.bookIntro.headingAccent,

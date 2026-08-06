@@ -162,7 +162,7 @@ export function Problems({
   return (
     <section id="problems" className="py-20 lg:py-[110px]">
       <div className="mx-auto max-w-[1220px] px-6">
-        <SecMeta num={1} label={intro.sectionLabel || "Diagnosis"} />
+        <SecMeta num={intro.sectionNumber ?? 1} label={intro.sectionLabel || "Diagnosis"} />
 
         {/* ── heading ─────────────────────────────────────────────── */}
         <Reveal className="mx-auto mb-14 max-w-[760px] text-center">
