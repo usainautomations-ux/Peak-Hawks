@@ -64,12 +64,12 @@ export function CaseStudies({
                   </h3>
                   <dl className="mt-5 border-t border-white/10">
                     {[
-                      ["Positioning", c.positioning],
-                      ["Angle", c.angle],
-                      ["Competition", c.competition],
-                    ].map(([k, v]) => (
+                      [intro.positioningLabel || "Positioning", c.positioning],
+                      [intro.angleLabel || "Angle", c.angle],
+                      [intro.competitionLabel || "Competition", c.competition],
+                    ].map(([k, v], rowIndex) => (
                       <div
-                        key={k}
+                        key={`${rowIndex}-${k}`}
                         className="grid grid-cols-[104px_1fr] gap-3.5 border-b border-white/10 py-2.5 text-[.85rem]"
                       >
                         <dt className="pt-0.5 font-mono text-[.64rem] uppercase tracking-wider text-[#8E8E95]">
