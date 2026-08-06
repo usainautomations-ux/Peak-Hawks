@@ -22,7 +22,7 @@ const PAGES_WITH_SECTIONS = ["/", "/newseller", "/case-studies"];
  *    screen — no point floating a shortcut to the thing already in view —
  *    then reappears once they scroll past it.
  */
-export function MobileBookCTA() {
+export function MobileBookCTA({ label }: { label: string }) {
   const pathname = usePathname();
   const onSectionPage = PAGES_WITH_SECTIONS.includes(pathname);
   const href = onSectionPage ? "#book-a-call" : "/#book-a-call";
@@ -86,7 +86,7 @@ export function MobileBookCTA() {
         href={href}
         className="btn-primary flex w-full items-center justify-center py-3.5 text-[.92rem] !text-bg shadow-[0_10px_30px_rgba(234,92,0,.35)]"
       >
-        Book a Strategy Call <span className="arrow">→</span>
+        {label}
       </a>
     </div>
   );

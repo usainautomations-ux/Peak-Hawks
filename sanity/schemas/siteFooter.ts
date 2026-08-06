@@ -15,6 +15,7 @@ export const siteFooter = {
     { name: "brand", title: "Logo & Tagline", default: true },
     { name: "columns", title: "Link Columns" },
     { name: "bottom", title: "Bottom Bar" },
+    { name: "mobileCta", title: "Mobile Book Bar" },
   ],
 
   fields: [
@@ -121,6 +122,18 @@ export const siteFooter = {
         { name: "privacy", title: "Privacy link text", type: "string" },
         { name: "disclaimer", title: "Disclaimer link text", type: "string" },
       ],
+    },
+    // ── MOBILE BOOK BAR ──────────────────────────────────────────────
+    {
+      name: "mobileCtaLabel",
+      title: "Button text",
+      type: "string",
+      group: "mobileCta",
+      description:
+        "Text on the floating \u201cBook a Call\u201d bar that sticks to the bottom " +
+        "of the screen on phones and tablets, across every page (Homepage, New " +
+        "Sellers, Blog, Case Studies). One shared value \u2014 it's the same bar " +
+        "everywhere, not per-page content.",
     },
   ],
 

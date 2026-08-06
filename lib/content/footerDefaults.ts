@@ -32,6 +32,11 @@ export type FooterContent = {
   copyright: string;
   /** The TERMS / PRIVACY / DISCLAIMER triggers. */
   legalLabels: { terms: string; privacy: string; disclaimer: string };
+  /** Text on the floating "Book a Call" bar shown on mobile/tablet across
+   * every page (Homepage, New Sellers, Blog, Case Studies) — see
+   * components/MobileBookCTA.tsx. One shared value since the bar itself
+   * is one shared, site-wide element, not per-page content. */
+  mobileCtaLabel: string;
 };
 
 /**
@@ -80,4 +85,5 @@ export const footerDefaults: FooterContent = {
   wordmark: "PEAKHAWKS",
   copyright: "© {year} PEAKHAWKS. ALL RIGHTS RESERVED.",
   legalLabels: { terms: "TERMS", privacy: "PRIVACY", disclaimer: "DISCLAIMER" },
+  mobileCtaLabel: "Book a Strategy Call",
 };

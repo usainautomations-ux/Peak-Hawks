@@ -280,5 +280,8 @@ export async function getMergedFooter(): Promise<FooterContent> {
       disclaimer:
         f.legalLabels?.disclaimer ?? footerDefaults.legalLabels.disclaimer,
     },
+    mobileCtaLabel: f.mobileCtaLabel?.trim()
+      ? f.mobileCtaLabel
+      : footerDefaults.mobileCtaLabel,
   };
 }

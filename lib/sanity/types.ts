@@ -133,6 +133,7 @@ export type SanityFooterContent = {
   wordmark?: string;
   copyright?: string;
   legalLabels?: { terms?: string; privacy?: string; disclaimer?: string };
+  mobileCtaLabel?: string;
 };
 
 export type SanityCaseStudyListItem = {

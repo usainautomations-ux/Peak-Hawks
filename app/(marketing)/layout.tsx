@@ -37,7 +37,7 @@ export default async function MarketingLayout({
       <Nav />
       <main id="main-content">{children}</main>
       <Footer data={footer} />
-      <MobileBookCTA />
+      <MobileBookCTA label={footer.mobileCtaLabel} />
     </LegalModalProvider>
   );
 }

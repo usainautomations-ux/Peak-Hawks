@@ -166,6 +166,7 @@ function toFooterDoc() {
     wordmark: footerDefaults.wordmark,
     copyright: footerDefaults.copyright,
     legalLabels: footerDefaults.legalLabels,
+    mobileCtaLabel: footerDefaults.mobileCtaLabel,
   };
 }
 

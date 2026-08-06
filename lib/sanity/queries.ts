@@ -74,7 +74,8 @@ const FOOTER_PROJECTION = `{
   columns[] { title, links[] { label, href } },
   wordmark,
   copyright,
-  legalLabels { terms, privacy, disclaimer }
+  legalLabels { terms, privacy, disclaimer },
+  mobileCtaLabel
 }`;
 
 /**
