@@ -257,13 +257,11 @@ export function Problems({
                   <div
                     key={`banner-${i}`}
                     className={[
-                      // Icon top-aligns with the content column, same rule
-                      // as the Diagnosis cards above — the icon sits at the
-                      // top rather than centered against the block's full
-                      // height, so a two-line block (like "Growth Fails In
-                      // Systems. Not Channels.") doesn't visually drag the
-                      // icon down or leave it looking randomly placed.
-                      "flex items-start gap-4 sm:gap-5",
+                      // Icon vertically centers against the whole content
+                      // block — single line or two — so the circle always
+                      // sits in the middle of its row, matching the
+                      // reference design exactly.
+                      "flex items-center gap-4 sm:gap-5",
                       i > 0
                         ? "border-t border-white/10 pt-7 md:border-l md:border-t-0 md:pl-10 md:pt-0"
                         : "",
@@ -279,7 +277,7 @@ export function Problems({
                       )}
                     </span>
                     {b.value ? (
-                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-1 sm:pt-1.5">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                         <span className={`font-display ${size.value} font-extrabold leading-none tracking-tight text-ember`}>
                           {b.value}
                         </span>
@@ -288,7 +286,7 @@ export function Problems({
                         </span>
                       </div>
                     ) : (
-                      <span className={`font-display ${size.textOnly} pt-1.5 block font-extrabold leading-tight tracking-tight text-[#F5F4F2] sm:pt-2`}>
+                      <span className={`font-display ${size.textOnly} block font-extrabold leading-tight tracking-tight text-[#F5F4F2]`}>
                         <Accent text={b.text} accent={b.textAccent} />
                       </span>
                     )}
