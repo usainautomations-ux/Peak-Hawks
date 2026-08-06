@@ -118,9 +118,14 @@ function ProblemCard({ item, side }: { item: Problem; side: "left" | "right" }) 
       data-side={side}
       className="group relative z-10 h-full rounded-[18px] border border-line bg-surface p-5 shadow-[0_16px_40px_-28px_rgba(21,23,26,.4)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_54px_rgba(21,23,26,.13)] sm:p-6"
     >
+      {/* Icon sits in its own fixed-width column; everything else — title,
+          divider, body, badge — lives in the column to its right so it all
+          shares one left edge. Previously the divider/body/badge spanned
+          the card's full width, running back under the icon, which left
+          no clear space beneath it. */}
       <div className="flex items-start gap-3.5 sm:gap-4">
         <IconBubble icon={item.icon} image={item.iconImage} alt="" size="cardResponsive" />
-        <div className="min-w-0 pt-0.5">
+        <div className="min-w-0 flex-1 pt-0.5">
           {(item.number || item.category) && (
             <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-[.66rem] uppercase tracking-[.16em] sm:text-[.68rem] sm:tracking-[.18em]">
               {item.number ? <b className="text-ember">{item.number}</b> : null}
@@ -128,18 +133,18 @@ function ProblemCard({ item, side }: { item: Problem; side: "left" | "right" }) 
             </div>
           )}
           <h3 className="text-[1.05rem] leading-tight sm:text-[1.15rem]">{item.title}</h3>
+
+          <span className="mt-4 block h-[3px] w-10 rounded-full bg-ember" />
+          <p className="mt-3.5 text-[.92rem] leading-relaxed">{item.body}</p>
+
+          {item.badge ? (
+            <span className="mt-5 inline-flex max-w-full items-start gap-2 rounded-lg bg-ember/10 px-3 py-1.5 text-left text-[.76rem] font-medium leading-snug text-ember sm:text-[.78rem]">
+              <Icon name="alert" size={14} className="mt-0.5 flex-none" />
+              {item.badge}
+            </span>
+          ) : null}
         </div>
       </div>
-
-      <span className="mt-4 block h-[3px] w-10 rounded-full bg-ember" />
-      <p className="mt-3.5 text-[.92rem] leading-relaxed">{item.body}</p>
-
-      {item.badge ? (
-        <span className="mt-5 inline-flex max-w-full items-start gap-2 rounded-lg bg-ember/10 px-3 py-1.5 text-left text-[.76rem] font-medium leading-snug text-ember sm:text-[.78rem]">
-          <Icon name="alert" size={14} className="mt-0.5 flex-none" />
-          {item.badge}
-        </span>
-      ) : null}
     </div>
   );
 }
