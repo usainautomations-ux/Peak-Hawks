@@ -312,7 +312,8 @@ export const pageContent = {
             description: "Upload your own icon instead of using the dropdown above. A transparent PNG or SVG works best." },
           { name: "value", title: "Big figure (optional)", type: "string",
             description: 'e.g. "84%" — leave blank for a statement-only block.' },
-          { name: "text", title: "Text", type: "text", rows: 2 },
+          { name: "text", title: "Text", type: "text", rows: 2,
+            description: "Press Enter for a manual line break exactly where you want it \u2014 the site will render it. Otherwise the text just wraps naturally to fit the space." },
           { name: "textAccent", title: "Orange part of the text", type: "string" },
           { name: "textSize", title: "Text size", type: "string",
             options: {

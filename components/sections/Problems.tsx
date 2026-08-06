@@ -281,12 +281,16 @@ export function Problems({
                         <span className={`font-display ${size.value} font-extrabold leading-none tracking-tight text-ember`}>
                           {b.value}
                         </span>
-                        <span className={`font-display ${size.text} font-bold leading-snug text-[#F5F4F2]`}>
+                        {/* whitespace-pre-line: a line break typed in the
+                            Studio's "Text" field is stored correctly, but
+                            HTML collapses raw newlines by default — this
+                            tells the browser to actually render them. */}
+                        <span className={`font-display ${size.text} whitespace-pre-line font-bold leading-snug text-[#F5F4F2]`}>
                           <Accent text={b.text} accent={b.textAccent} />
                         </span>
                       </div>
                     ) : (
-                      <span className={`font-display ${size.textOnly} block font-extrabold leading-tight tracking-tight text-[#F5F4F2]`}>
+                      <span className={`font-display ${size.textOnly} block whitespace-pre-line font-extrabold leading-tight tracking-tight text-[#F5F4F2]`}>
                         <Accent text={b.text} accent={b.textAccent} />
                       </span>
                     )}
