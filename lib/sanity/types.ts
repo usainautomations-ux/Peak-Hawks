@@ -65,6 +65,7 @@ export type SanityPageContent = {
     value?: string;
     text: string;
     textAccent?: string;
+    textSize?: "sm" | "md" | "lg";
   }>;
   whyUsIntro?: {
     sectionLabel?: string;

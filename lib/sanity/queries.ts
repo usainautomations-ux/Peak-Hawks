@@ -42,7 +42,7 @@ const PAGE_PROJECTION = `{
     "iconImage": iconImage.asset->url
   },
   problemsBanner[] {
-    icon, "iconImage": iconImage.asset->url, value, text, textAccent
+    icon, "iconImage": iconImage.asset->url, value, text, textAccent, textSize
   },
   whyUsIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   whyUs[] {

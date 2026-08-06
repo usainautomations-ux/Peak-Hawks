@@ -313,6 +313,16 @@ export const pageContent = {
             description: 'e.g. "84%" — leave blank for a statement-only block.' },
           { name: "text", title: "Text", type: "text", rows: 2 },
           { name: "textAccent", title: "Orange part of the text", type: "string" },
+          { name: "textSize", title: "Text size", type: "string",
+            options: {
+              list: [
+                { title: "Small", value: "sm" },
+                { title: "Medium (default)", value: "md" },
+                { title: "Large", value: "lg" },
+              ],
+              layout: "radio",
+            },
+            description: "Scales the big figure and its text together. Leave unset for the default size." },
         ],
         preview: { select: { title: "text", subtitle: "value" } },
       }],

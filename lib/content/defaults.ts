@@ -135,6 +135,9 @@ export type ProblemsBannerItem = {
   text: string;
   /** Part of `text` rendered in orange. */
   textAccent?: string;
+  /** Overall text size for this block — the big value and its text scale
+   * together. Defaults to "md" (today's size) when not set. */
+  textSize?: "sm" | "md" | "lg";
 };
 /** Which icon renders inside the orange circle of the "Outcome" callout
  * at the bottom of a Why Us row. Kept as a small fixed set so the Studio

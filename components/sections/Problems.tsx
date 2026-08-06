@@ -11,6 +11,26 @@ import { SecMeta } from "@/components/SecMeta";
 import { ProblemConnectors } from "@/components/sections/ProblemConnectors";
 import { sanityThumb } from "@/lib/sanity/imageUrl";
 
+/** Text sizing for a Diagnosis Summary Bar block, keyed by the Studio's
+ * "Text size" dropdown. "md" matches the size this bar has always used. */
+const BANNER_SIZES = {
+  sm: {
+    value: "text-[clamp(1.3rem,5vw,1.9rem)]",
+    text: "text-[.8rem] sm:text-[.84rem]",
+    textOnly: "text-[clamp(0.95rem,3.6vw,1.2rem)]",
+  },
+  md: {
+    value: "text-[clamp(1.8rem,7vw,2.8rem)]",
+    text: "text-[.92rem] sm:text-[.98rem]",
+    textOnly: "text-[clamp(1.1rem,4.4vw,1.5rem)]",
+  },
+  lg: {
+    value: "text-[clamp(2.2rem,8vw,3.4rem)]",
+    text: "text-[1rem] sm:text-[1.08rem]",
+    textOnly: "text-[clamp(1.3rem,5vw,1.9rem)]",
+  },
+} as const;
+
 /**
  * "Diagnosis" section — a dark score dial in the middle with the
  * bottleneck cards arranged around it, closing on a dark summary bar.
@@ -231,41 +251,50 @@ export function Problems({
         {banner.length ? (
           <Reveal delay={0.1} className="mt-8">
             <div className="grid gap-7 rounded-[20px] bg-[#15171A] px-6 py-8 sm:px-9 sm:py-9 md:grid-cols-[repeat(auto-fit,minmax(280px,1fr))] md:gap-x-0 md:px-12">
-              {banner.map((b, i) => (
-                <div
-                  key={`banner-${i}`}
-                  className={[
-                    "flex items-center gap-4 sm:gap-5",
-                    i > 0
-                      ? "border-t border-white/10 pt-7 md:border-l md:border-t-0 md:pl-10 md:pt-0"
-                      : "",
-                    "md:pr-10",
-                  ].join(" ")}
-                >
-                  <span className="flex h-12 w-12 flex-none items-center justify-center rounded-full border border-white/10 bg-white/[.04] text-ember sm:h-14 sm:w-14">
-                    {b.iconImage ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={sanityThumb(b.iconImage, 64)} alt="" className="h-6 w-6 object-contain" />
+              {banner.map((b, i) => {
+                const size = BANNER_SIZES[b.textSize ?? "md"];
+                return (
+                  <div
+                    key={`banner-${i}`}
+                    className={[
+                      // Icon top-aligns with the content column, same rule
+                      // as the Diagnosis cards above — the icon sits at the
+                      // top rather than centered against the block's full
+                      // height, so a two-line block (like "Growth Fails In
+                      // Systems. Not Channels.") doesn't visually drag the
+                      // icon down or leave it looking randomly placed.
+                      "flex items-start gap-4 sm:gap-5",
+                      i > 0
+                        ? "border-t border-white/10 pt-7 md:border-l md:border-t-0 md:pl-10 md:pt-0"
+                        : "",
+                      "md:pr-10",
+                    ].join(" ")}
+                  >
+                    <span className="flex h-12 w-12 flex-none items-center justify-center rounded-full border border-white/10 bg-white/[.04] text-ember sm:h-14 sm:w-14">
+                      {b.iconImage ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={sanityThumb(b.iconImage, 64)} alt="" className="h-6 w-6 object-contain" />
+                      ) : (
+                        <Icon name={b.icon} size={22} />
+                      )}
+                    </span>
+                    {b.value ? (
+                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-1 sm:pt-1.5">
+                        <span className={`font-display ${size.value} font-extrabold leading-none tracking-tight text-ember`}>
+                          {b.value}
+                        </span>
+                        <span className={`font-display ${size.text} font-bold leading-snug text-[#F5F4F2]`}>
+                          <Accent text={b.text} accent={b.textAccent} />
+                        </span>
+                      </div>
                     ) : (
-                      <Icon name={b.icon} size={22} />
-                    )}
-                  </span>
-                  {b.value ? (
-                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <span className="font-display text-[clamp(1.8rem,7vw,2.8rem)] font-extrabold leading-none tracking-tight text-ember">
-                        {b.value}
-                      </span>
-                      <span className="font-display text-[.92rem] font-bold leading-snug text-[#F5F4F2] sm:text-[.98rem]">
+                      <span className={`font-display ${size.textOnly} pt-1.5 block font-extrabold leading-tight tracking-tight text-[#F5F4F2] sm:pt-2`}>
                         <Accent text={b.text} accent={b.textAccent} />
                       </span>
-                    </div>
-                  ) : (
-                    <span className="font-display text-[clamp(1.1rem,4.4vw,1.5rem)] font-extrabold leading-tight tracking-tight text-[#F5F4F2]">
-                      <Accent text={b.text} accent={b.textAccent} />
-                    </span>
-                  )}
-                </div>
-              ))}
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </Reveal>
         ) : null}
