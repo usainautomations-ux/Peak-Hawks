@@ -3,6 +3,7 @@ import { z } from "zod";
 import { upsertContact, createOpportunity } from "@/lib/ghl/crm";
 import { bookAppointment } from "@/lib/ghl/calendar";
 import { rateLimited, getClientIp } from "@/lib/rateLimit";
+import { describeGhlFailure } from "@/lib/ghl/errorMessage";
 
 export const runtime = "nodejs";
 
@@ -75,24 +76,21 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true, appointment, contactId: contact.id });
   } catch (err) {
-    const status =
-      err && typeof err === "object" && "status" in err
-        ? (err as { status: number }).status
-        : 500;
-    const body =
-      err && typeof err === "object" && "body" in err
-        ? JSON.stringify((err as { body: unknown }).body)
-        : "";
     console.error("[booking] failed", err);
-    if (status === 401 || status === 403) {
-      console.error(
-        `[booking] Auth error (${status}) — ensure the Private Integration token has the "calendars/events.write" scope and was rotated after adding it. ${body}`,
-      );
-      return NextResponse.json(
-        { ok: false, error: "Booking is temporarily unavailable. Please email us directly." },
-        { status: 503 },
-      );
+
+    // A missing env var or an auth/scope problem is a configuration issue
+    // the site owner can actually fix — surface exactly what's wrong
+    // rather than a generic "please email us" for every failure.
+    const isConfigOrAuthIssue =
+      (err instanceof Error && /^Missing required env var:/.test(err.message)) ||
+      (err && typeof err === "object" && "status" in err &&
+        [401, 403].includes((err as { status: number }).status));
+
+    if (isConfigOrAuthIssue) {
+      const { message, status } = describeGhlFailure(err);
+      return NextResponse.json({ ok: false, error: message }, { status });
     }
+
     return NextResponse.json(
       {
         ok: false,

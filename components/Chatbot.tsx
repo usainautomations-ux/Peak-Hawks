@@ -132,7 +132,7 @@ export function Chatbot() {
       <button
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close chat" : "Open chat"}
-        className="fixed bottom-6 right-6 z-[300] flex h-15 w-15 items-center justify-center rounded-full bg-ember text-bg shadow-[0_3px_0_#A64500,0_10px_26px_rgba(21,23,26,.22)] transition hover:scale-105 hover:bg-orange"
+        className="fixed bottom-[104px] right-4 z-[300] flex h-15 w-15 items-center justify-center rounded-full bg-ember text-bg shadow-[0_3px_0_#A64500,0_10px_26px_rgba(21,23,26,.22)] transition hover:scale-105 hover:bg-orange lg:bottom-6 lg:right-6"
         style={{ height: 60, width: 60 }}
       >
         {open ? "✕" : "💬"}
@@ -147,7 +147,7 @@ export function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 320, damping: 28 }}
-            className="fixed bottom-[104px] right-6 z-[300] flex h-[540px] max-h-[calc(100dvh-140px)] w-[378px] max-w-[calc(100vw-32px)] flex-col overflow-hidden rounded-[20px] border border-line-strong bg-surface shadow-[0_30px_80px_rgba(21,23,26,.22)]"
+            className="fixed bottom-[184px] right-4 z-[300] flex h-[540px] max-h-[calc(100dvh-220px)] w-[378px] max-w-[calc(100vw-32px)] flex-col overflow-hidden rounded-[20px] border border-line-strong bg-surface shadow-[0_30px_80px_rgba(21,23,26,.22)] lg:bottom-[104px] lg:right-6 lg:max-h-[calc(100dvh-140px)]"
           >
             <div className="flex items-center gap-3 border-b border-line bg-gradient-to-br from-ember/10 to-transparent p-5">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ember text-bg">

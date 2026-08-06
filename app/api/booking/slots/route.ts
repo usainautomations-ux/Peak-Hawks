@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { getFreeSlots } from "@/lib/ghl/calendar";
+import { GHLError } from "@/lib/ghl/client";
+import { describeGhlFailure } from "@/lib/ghl/errorMessage";
 
 export const runtime = "nodejs";
 
@@ -40,9 +42,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ ok: true, days });
   } catch (err) {
     console.error("[booking/slots] failed", err);
-    return NextResponse.json(
-      { ok: false, error: "Could not load availability" },
-      { status: 502 },
-    );
+    const { message, status } = describeGhlFailure(err);
+    return NextResponse.json({ ok: false, error: message }, { status });
   }
 }

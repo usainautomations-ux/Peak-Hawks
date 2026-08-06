@@ -11,6 +11,11 @@ import { AnimatePresence, motion } from "framer-motion";
  * hash to whatever page you're currently on. */
 const SECTION_IDS = ["why-us", "results", "services", "faq", "book-a-call"];
 const PAGES_WITH_SECTIONS = ["/", "/newseller"];
+// Case Studies has its own Testimonials + Book A Call section at the
+// bottom (with the live calendar) even though it doesn't have the other
+// homepage sections — so it needs its own check just for that one link,
+// separate from PAGES_WITH_SECTIONS above.
+const PAGES_WITH_BOOKING_SECTION = ["/", "/newseller", "/case-studies"];
 
 const NAV_ITEMS: [string, string][] = [
   ["why-us", "Why Us"],
@@ -35,7 +40,9 @@ export function Nav() {
     if (id === "blog") return "/blog";
     return SECTION_IDS.includes(id) && onSectionPage ? `#${id}` : `/#${id}`;
   }
-  const bookHref = onSectionPage ? "#book-a-call" : "/#book-a-call";
+  const bookHref = PAGES_WITH_BOOKING_SECTION.includes(pathname)
+    ? "#book-a-call"
+    : "/#book-a-call";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);

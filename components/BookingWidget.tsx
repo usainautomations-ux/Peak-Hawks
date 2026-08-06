@@ -48,9 +48,13 @@ export function BookingWidget() {
       .then((data) => {
         if (cancelled) return;
         if (data.ok) setDays(data.days ?? []);
-        else setLoadError("Could not load availability.");
+        // Show the server's actual reason (e.g. "GHL_CALENDAR_ID is missing
+        // from this deployment") rather than a generic message — this is
+        // what makes a misconfigured integration self-diagnosable instead
+        // of requiring someone to dig through server logs.
+        else setLoadError(data.error || "Could not load availability.");
       })
-      .catch(() => !cancelled && setLoadError("Could not load availability."))
+      .catch(() => !cancelled && setLoadError("Could not reach the booking service."))
       .finally(() => !cancelled && setLoading(false));
 
     return () => {

@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SanityImage as Image } from "@/components/ui/SanityImage";
 import { getMergedCaseStudyList } from "@/lib/content/caseStudyMerged";
+import { getMergedContent } from "@/lib/content/merged";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { BookACall } from "@/components/sections/BookACall";
 
 export const dynamic = "force-dynamic"; // always fetch fresh from Sanity, no caching
 
@@ -12,7 +15,10 @@ export const metadata: Metadata = {
 };
 
 export default async function CaseStudiesPage() {
-  const items = await getMergedCaseStudyList();
+  const [items, content] = await Promise.all([
+    getMergedCaseStudyList(),
+    getMergedContent(),
+  ]);
 
   return (
     <main className="min-h-screen pt-[100px]">
@@ -26,12 +32,6 @@ export default async function CaseStudiesPage() {
           How research-led positioning decisions turned into rank and revenue —
           every launch, start to finish.
         </p>
-        <Link
-          href="/#book-a-call"
-          className="btn-primary mt-8 inline-flex px-7 py-3.5 text-[.9rem] !text-bg"
-        >
-          Book a Strategy Call <span className="arrow">→</span>
-        </Link>
       </div>
 
       <div className="mx-auto max-w-[1180px] px-6 py-20">
@@ -43,7 +43,7 @@ export default async function CaseStudiesPage() {
             <h2 className="text-2xl">No case studies published yet.</h2>
             <p className="mt-3 text-grey">
               Check back soon — or{" "}
-              <Link href="/#book-a-call" className="text-ember hover:underline">
+              <Link href="#book-a-call" className="text-ember hover:underline">
                 book a strategy call
               </Link>{" "}
               in the meantime.
@@ -94,6 +94,9 @@ export default async function CaseStudiesPage() {
           </div>
         )}
       </div>
+
+      <Testimonials items={content.testimonials} intro={content.testimonialsIntro} />
+      <BookACall intro={content.bookIntro} />
     </main>
   );
 }

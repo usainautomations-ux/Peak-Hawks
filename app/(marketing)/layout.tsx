@@ -6,6 +6,7 @@ import { CursorRing } from "@/components/CursorRing";
 import { Altimeter } from "@/components/Altimeter";
 import { LegalModalProvider } from "@/components/LegalModal";
 import { SmoothHashScroll } from "@/components/SmoothHashScroll";
+import { MobileBookCTA } from "@/components/MobileBookCTA";
 
 /**
  * Layout for the public marketing site only. /studio intentionally sits
@@ -36,6 +37,7 @@ export default async function MarketingLayout({
       <Nav />
       <main id="main-content">{children}</main>
       <Footer data={footer} />
+      <MobileBookCTA />
     </LegalModalProvider>
   );
 }
