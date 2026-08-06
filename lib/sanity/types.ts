@@ -27,9 +27,11 @@ export type SanityPageContent = {
   statsIntro?: SanitySectionIntro;
   stats?: Array<{ value: number; prefix?: string; suffix: string; label: string }>;
   brandsIntro?: SanitySectionIntro;
+  categoriesIntro?: SanitySectionIntro;
   /** Legacy shape (plain strings) is still accepted and normalised in
    * lib/content/merged.ts, so old documents keep working. */
   brandLogos?: Array<string | { name?: string; logo?: string }>;
+  categories?: Array<string | { name?: string; logo?: string }>;
   problemsIntro?: {
     sectionLabel?: string;
     sectionNumber?: number;

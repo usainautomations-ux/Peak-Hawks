@@ -54,6 +54,7 @@ export default async function HomePage() {
       <WhyUs rows={content.whyUs} intro={content.whyUsIntro} />
       <Stats items={content.stats} intro={content.statsIntro} />
       <CaseStudies items={content.caseStudies} intro={content.caseStudiesIntro} />
+      <LogoMarquee logos={content.categories} intro={content.categoriesIntro} />
       <Services items={content.services} intro={content.servicesIntro} />
       <Process steps={content.process} intro={content.processIntro} />
       <Testimonials items={content.testimonials} intro={content.testimonialsIntro} />

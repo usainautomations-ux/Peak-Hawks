@@ -44,6 +44,20 @@ export const newSellerDefaults: SiteContent = {
     { name: "ELEVATE+" },
     { name: "Lumen Labs" },
   ],
+  categoriesIntro: {
+    sectionLabel: "",
+    eyebrow: "",
+    heading: "Categories We've Served",
+    headingAccent: "",
+  },
+  categories: [
+    { name: "Health & Wellness" },
+    { name: "Beauty & Personal Care" },
+    { name: "Home & Kitchen" },
+    { name: "Pet Care" },
+    { name: "Supplements" },
+    { name: "Baby & Kids" },
+  ],
   problemsIntro: {
     sectionLabel: "Diagnosis",
     sectionNumber: 1,

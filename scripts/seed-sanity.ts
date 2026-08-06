@@ -104,6 +104,12 @@ function toSanityDoc(id: string, content: SiteContent) {
       })),
     ),
     caseStudiesIntro: content.caseStudiesIntro,
+    categoriesIntro: content.categoriesIntro,
+    // Same reasoning as brandLogos above — images are asset references,
+    // so only text names are seeded.
+    categories: withKeys(
+      content.categories.map(({ name }) => ({ _type: "categoryItem", name })),
+    ),
     servicesIntro: content.servicesIntro,
     services: withKeys(content.services),
     processIntro: content.processIntro,

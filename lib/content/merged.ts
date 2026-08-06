@@ -116,6 +116,8 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
     stats: sanity.stats?.length ? sanity.stats : base.stats,
     brandsIntro: overlayIntro(base.brandsIntro, sanity.brandsIntro),
     brandLogos: normaliseBrandLogos(sanity.brandLogos, base.brandLogos),
+    categoriesIntro: overlayIntro(base.categoriesIntro, sanity.categoriesIntro),
+    categories: normaliseBrandLogos(sanity.categories, base.categories),
     problemsIntro: {
       sectionLabel:
         sanity.problemsIntro?.sectionLabel ?? base.problemsIntro.sectionLabel,

@@ -218,6 +218,12 @@ export type SiteContent = {
   };
   brandsIntro: SectionIntro;
   brandLogos: BrandLogo[];
+  /** The "Categories We've Served" strip after the Case Studies section —
+   * same scrolling-marquee component and same {name, logo?} shape as the
+   * Brand Logos strip above, reused for a second bar rather than building
+   * a near-identical one from scratch. */
+  categoriesIntro: SectionIntro;
+  categories: BrandLogo[];
   problemsIntro: ProblemsIntro;
   problems: Problem[];
   problemsGauge: ProblemsGauge;
@@ -291,6 +297,22 @@ export const defaultContent: SiteContent = {
     { name: "Lumen Labs" },
     { name: "NORDIQ" },
     { name: "Zen Basics" },
+  ],
+  categoriesIntro: {
+    sectionLabel: "",
+    eyebrow: "",
+    heading: "Categories We've Served",
+    headingAccent: "",
+  },
+  categories: [
+    { name: "Health & Wellness" },
+    { name: "Beauty & Personal Care" },
+    { name: "Home & Kitchen" },
+    { name: "Sports & Outdoors" },
+    { name: "Pet Care" },
+    { name: "Supplements" },
+    { name: "Baby & Kids" },
+    { name: "Electronics Accessories" },
   ],
   problemsIntro: {
     sectionLabel: "Diagnosis",

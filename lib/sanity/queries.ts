@@ -30,6 +30,11 @@ const PAGE_PROJECTION = `{
     "name": @.name,
     "logo": logo.asset->url
   },
+  categoriesIntro { sectionLabel, eyebrow, heading, headingAccent, subhead },
+  categories[] {
+    "name": @.name,
+    "logo": logo.asset->url
+  },
   problemsIntro {
     sectionLabel, sectionNumber, eyebrow, eyebrowIcon, heading, headingSub, headingAccent, subhead, subheadAccent
   },

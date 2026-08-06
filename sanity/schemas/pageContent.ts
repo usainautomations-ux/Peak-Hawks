@@ -127,6 +127,7 @@ export const pageContent = {
     { name: "whyUs", title: "Why Us" },
     { name: "stats", title: "Stats" },
     { name: "caseStudies", title: "Case Studies" },
+    { name: "categories", title: "Categories Bar" },
     { name: "services", title: "Services" },
     { name: "process", title: "Process" },
     { name: "testimonials", title: "Testimonials" },
@@ -420,6 +421,37 @@ export const pageContent = {
           description: 'The third column header. Leave blank to keep "Competition".' },
       ],
     }),
+
+    // ── CATEGORIES BAR ───────────────────────────────────────────────────
+    // Same scrolling-strip component as Brand Logos above, reused with its
+    // own content — it sits right after Case Studies on the live page.
+    sectionIntro({
+      name: "categoriesIntro",
+      title: "Categories Bar — heading",
+      group: "categories",
+      include: ["heading"],
+      description: 'The line above the scrolling strip, e.g. "Categories We\'ve Served".',
+    }),
+    {
+      name: "categories",
+      title: "Categories",
+      type: "array",
+      group: "categories",
+      description:
+        "The categories that scroll across the strip, right after Case Studies. For each one you can type a name, upload a small icon/image, or do both (the image is used, the name becomes its alt text). Add as many as you like — the strip loops seamlessly at any length.",
+      of: [{
+        type: "object",
+        name: "categoryItem",
+        fields: [
+          { name: "name", title: "Category name (text)", type: "string",
+            description: "Shown as text when no image is uploaded. Also used as the image's alt text." },
+          { name: "logo", title: "Icon / image (optional)", type: "image",
+            options: { hotspot: true },
+            description: "Upload an icon or image to show instead of the text. A transparent PNG or SVG works best — it is greyed out and lights up on hover, matching the text categories." },
+        ],
+        preview: { select: { title: "name", media: "logo" } },
+      }],
+    },
 
     // ── SERVICES ───────────────────────────────────────────────────────
     sectionIntro({ name: "servicesIntro", title: "Services — heading", group: "services" }),
