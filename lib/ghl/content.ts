@@ -113,6 +113,13 @@ export async function getSiteContent(): Promise<SiteContent> {
     // and only the keys explicitly overridden below read from GHL.
     ...d,
     hero: {
+      // Spread first, same reasoning as the top-level ...d above — a
+      // nested object rebuilt field-by-field breaks every time a new
+      // field (like partnerLogos) is added to the Hero type, since
+      // TypeScript then requires it here too. Spreading the default
+      // first means new fields just pass through unless a GHL custom
+      // value is explicitly wired up for them below.
+      ...d.hero,
       badge: str(map, "site_hero_badge", d.hero.badge),
       headline: str(map, "site_hero_headline", d.hero.headline),
       headlineAccent: str(map, "site_hero_accent", d.hero.headlineAccent),
