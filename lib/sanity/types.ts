@@ -23,6 +23,7 @@ export type SanityPageContent = {
     posterImage?: string;
     posterImageMobile?: string;
     chips?: Array<{ value: string; label: string }>;
+    partnerLogos?: Array<string | { name?: string; logo?: string }>;
   };
   statsIntro?: SanitySectionIntro;
   stats?: Array<{ value: number; prefix?: string; suffix: string; label: string }>;

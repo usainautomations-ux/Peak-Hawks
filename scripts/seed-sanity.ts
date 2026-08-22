@@ -71,6 +71,11 @@ function toSanityDoc(id: string, content: SiteContent) {
       note: content.hero.note,
       videoUrl: content.hero.videoUrl || undefined,
       chips: withKeys(content.hero.chips),
+      // Same reasoning as brandLogos below — images are asset references,
+      // so only text names are seeded.
+      partnerLogos: withKeys(
+        content.hero.partnerLogos.map(({ name }) => ({ _type: "partnerLogo", name })),
+      ),
     },
     statsIntro: content.statsIntro,
     stats: withKeys(content.stats),

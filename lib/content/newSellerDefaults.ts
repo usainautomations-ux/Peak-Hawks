@@ -29,6 +29,10 @@ export const newSellerDefaults: SiteContent = {
       { value: "90d", label: "To First Sale" },
       { value: "100%", label: "Data-Checked" },
     ],
+    partnerLogos: [
+      { name: "Amazon Ads Verified Partner" },
+      { name: "Amazon SPN" },
+    ],
   },
   brandsIntro: {
     sectionLabel: "Clients",

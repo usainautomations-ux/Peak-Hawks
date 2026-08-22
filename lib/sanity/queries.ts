@@ -21,7 +21,11 @@ const PAGE_PROJECTION = `{
     videoUrl,
     "posterImage": posterImage.asset->url,
     "posterImageMobile": posterImageMobile.asset->url,
-    chips[] { value, label }
+    chips[] { value, label },
+    partnerLogos[] {
+      "name": @.name,
+      "logo": logo.asset->url
+    }
   },
   statsIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   stats[] { value, prefix, suffix, label },

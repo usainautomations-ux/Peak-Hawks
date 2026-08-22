@@ -237,6 +237,11 @@ export type SiteContent = {
      * phones. Falls back to the desktop image when not set. */
     posterImageMobile?: string;
     chips: HeroChip[];
+    /** Small partner/certification marks under the CTA buttons — e.g.
+     * "Amazon Ads Verified Partner", "Amazon SPN". Same {name, logo?}
+     * shape as the Brand Logos strip, reused here for a couple of fixed
+     * badges rather than a scrolling marquee. */
+    partnerLogos: BrandLogo[];
   };
   brandsIntro: SectionIntro;
   brandLogos: BrandLogo[];
@@ -290,6 +295,10 @@ export const defaultContent: SiteContent = {
       { value: "$28M+", label: "Generated" },
       { value: "40+", label: "Brands Scaled" },
       { value: "92%", label: "Launch Success" },
+    ],
+    partnerLogos: [
+      { name: "Amazon Ads Verified Partner" },
+      { name: "Amazon SPN" },
     ],
   },
   statsIntro: {

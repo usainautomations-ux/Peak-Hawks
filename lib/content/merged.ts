@@ -111,6 +111,7 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
       posterImageMobile:
         sanity.hero?.posterImageMobile ?? base.hero.posterImageMobile,
       chips: sanity.hero?.chips?.length ? sanity.hero.chips : base.hero.chips,
+      partnerLogos: normaliseBrandLogos(sanity.hero?.partnerLogos, base.hero.partnerLogos),
     },
     statsIntro: overlayIntro(base.statsIntro, sanity.statsIntro),
     stats: sanity.stats?.length ? sanity.stats : base.stats,
