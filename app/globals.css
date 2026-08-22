@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #f4f4f6;
+    color-scheme: light only;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px; /* clears the fixed nav bar so headings never land hidden behind it */
+    color-scheme: light only;
+    background: #f4f4f6;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+  body {
+    @apply bg-bg font-body text-ink antialiased;
+    overflow-x: hidden;
+    max-width: 100%;
+    position: relative;
+  }
+  /* film grain — kills the flat "generated dark mode" look */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 998;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  }
+  h1, h2, h3, h4 {
+    @apply font-display font-extrabold leading-[1.08] tracking-tight;
+  }
+  h1 { @apply text-[clamp(2.4rem,5.2vw,4.1rem)]; font-stretch: 112%; }
+  h2 { @apply text-[clamp(2rem,4.4vw,3.2rem)]; font-stretch: 112%; }
+  h3 { @apply text-[clamp(1.25rem,2vw,1.5rem)]; }
+  p  { @apply text-grey; }
+}
+
+@layer components {
+  .eyebrow {
+    @apply mb-4 inline-flex items-center gap-2.5 font-mono text-[.72rem] uppercase tracking-[.22em] text-ember;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-[22px] bg-ember;
+  }
+  .btn-primary {
+    @apply inline-flex items-center gap-2.5 rounded-[10px] bg-ember px-7 py-3.5 font-display text-[.95rem] font-bold text-bg
+           shadow-[0_3px_0_#A64500] transition duration-200 hover:-translate-y-0.5 hover:bg-orange hover:shadow-[0_5px_0_#A64500]
+           active:translate-y-px active:shadow-[0_1px_0_#A64500];
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2.5 rounded-[10px] border border-line-strong px-7 py-3.5
+           font-display text-[.95rem] font-bold text-silver transition hover:border-ember hover:text-ember;
+  }
+  .arrow { @apply transition-transform duration-200; }
+  .btn-primary:hover .arrow, .btn-ghost:hover .arrow { @apply translate-x-1; }
+
+  /* cursor-tracking glow used by GlowCard */
+  .glow-card::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300;
+    background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(234,92,0,.07), transparent 42%);
+  }
+  .glow-card::after {
+    content: "";
+    @apply pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300;
+    padding: 1px;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(234,92,0,.45), transparent 45%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  .glow-card:hover::before, .glow-card:hover::after { @apply opacity-100; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes caretBlink {
+  50% { opacity: 0; }
+}
+
+/* cursor-following glow ring — desktop only, toggled by CursorRing.tsx */
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  pointer-events: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(234, 92, 0, .6);
+  transform: translate(-50%, -50%);
+  transition: width .25s ease, height .25s ease, border-color .25s ease, background .25s ease, opacity .3s;
+  opacity: 0;
+}
+.cursor-ring.on { opacity: 1; }
+.cursor-ring.hovering {
+  width: 58px;
+  height: 58px;
+  background: rgba(234, 92, 0, .07);
+  border-color: rgba(234, 92, 0, .9);
+}
+@media (pointer: coarse) { .cursor-ring { display: none; } }
+
+/* body scroll lock while the preloader is up */
+body.loading { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001s !important;
+    transition-duration: .001s !important;
+  }
+  html { scroll-behavior: auto; }
+  .cursor-ring { display: none !important; }
+}
