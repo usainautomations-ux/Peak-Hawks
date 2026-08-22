@@ -78,6 +78,7 @@ const PAGE_PROJECTION = `{
 
 /** The shared "Footer" singleton — one document for the whole site. */
 const FOOTER_PROJECTION = `{
+  "siteLogo": siteLogo.asset->url,
   brandNameStart,
   brandNameAccent,
   "logo": logo.asset->url,

@@ -12,21 +12,39 @@ export const siteFooter = {
   __experimental_actions: ["update", "publish"], // singleton — no create/delete
 
   groups: [
-    { name: "brand", title: "Logo & Tagline", default: true },
+    { name: "siteLogo", title: "Site Logo", default: true },
+    { name: "brand", title: "Footer Logo & Tagline" },
     { name: "columns", title: "Link Columns" },
     { name: "bottom", title: "Bottom Bar" },
     { name: "mobileCta", title: "Mobile Book Bar" },
   ],
 
   fields: [
-    // ── LOGO & TAGLINE ─────────────────────────────────────────────────
+    // ── SITE LOGO (header + loading screen) ─────────────────────────────
+    {
+      name: "siteLogo",
+      title: "Logo image",
+      type: "image",
+      group: "siteLogo",
+      options: { hotspot: true },
+      description:
+        "Used in the top navigation bar on every page, AND in the loading " +
+        "animation shown for a moment when the site first opens \u2014 both sit " +
+        "on a light background, so use a dark or full-color logo (not a " +
+        "white one, it would be invisible). A transparent PNG or SVG works " +
+        "best. Leave blank to keep the built-in hawk mark + \u201cPeakHawks\u201d " +
+        "wordmark. This is separate from the Footer Logo below, which is a " +
+        "different image because the footer has a black background.",
+    },
+
+    // ── FOOTER LOGO & TAGLINE ────────────────────────────────────────────
     {
       name: "logo",
-      title: "Logo image (optional)",
+      title: "Footer logo image (optional)",
       type: "image",
       group: "brand",
       description:
-        "Upload a logo to replace the hawk mark and the PeakHawks wordmark. Because the footer background is black, use a white or light transparent PNG/SVG. Leave blank to keep the built-in mark and wordmark below.",
+        "Upload a logo to replace the hawk mark and the PeakHawks wordmark in the footer specifically. Because the footer background is black, use a white or light transparent PNG/SVG. Leave blank to keep the built-in mark and wordmark below. (For the logo shown in the navigation bar and loading screen instead, see the \"Site Logo\" tab.)",
     },
     {
       name: "brandNameStart",

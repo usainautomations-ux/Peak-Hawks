@@ -303,6 +303,7 @@ export async function getMergedFooter(): Promise<FooterContent> {
     : footerDefaults.columns;
 
   return {
+    siteLogo: f.siteLogo,
     brandNameStart: f.brandNameStart ?? footerDefaults.brandNameStart,
     brandNameAccent: f.brandNameAccent ?? footerDefaults.brandNameAccent,
     logo: f.logo,

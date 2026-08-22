@@ -147,6 +147,7 @@ export type SanityPageContent = {
 
 /** The "Footer" singleton document — shared by every page. */
 export type SanityFooterContent = {
+  siteLogo?: string;
   brandNameStart?: string;
   brandNameAccent?: string;
   logo?: string;

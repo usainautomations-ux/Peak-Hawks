@@ -24,7 +24,7 @@ export default async function MarketingLayout({
 
   return (
     <LegalModalProvider>
-      <Preloader />
+      <Preloader logo={footer.siteLogo} />
       <CursorRing />
       <Altimeter />
       <SmoothHashScroll />
@@ -34,7 +34,7 @@ export default async function MarketingLayout({
       >
         Skip to content
       </a>
-      <Nav />
+      <Nav logo={footer.siteLogo} />
       <main id="main-content">{children}</main>
       <Footer data={footer} />
       <MobileBookCTA label={footer.mobileCtaLabel} />
