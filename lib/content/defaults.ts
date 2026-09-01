@@ -307,8 +307,8 @@ export const defaultContent: SiteContent = {
       { name: "Amazon Ads Verified Partner" },
       { name: "Amazon SPN" },
     ],
-    partnerLogosLabel: "Trusted & Certified",
-    partnerLogosStyle: "muted",
+    partnerLogosLabel: "",
+    partnerLogosStyle: "full",
   },
   statsIntro: {
     sectionLabel: "Proof",
