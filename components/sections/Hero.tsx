@@ -254,12 +254,6 @@ export function Hero({ data }: { data: SiteContent["hero"] }) {
             </a>
           </div>
 
-          {data.note ? (
-            <p className="hero-note mt-5 font-mono text-[.72rem] tracking-wider text-grey">
-              // {data.note}
-            </p>
-          ) : null}
-
           {data.partnerLogos?.length ? (
             // Full-color logos, larger, no container box. Optional label
             // only appears if the client types one (blank by default).
@@ -270,25 +264,29 @@ export function Hero({ data }: { data: SiteContent["hero"] }) {
                   {data.partnerLogosLabel}
                 </p>
               ) : null}
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-              {data.partnerLogos.map((p, i) =>
-                p.logo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={`partner-${i}`}
-                    src={sanityThumb(p.logo, 320)}
-                    alt={p.name || ""}
-                    className="h-10 w-auto max-w-[180px] object-contain transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.06] sm:h-12"
-                  />
-                ) : (
-                  <span
-                    key={`partner-${i}`}
-                    className="font-mono text-[.8rem] font-semibold uppercase tracking-wider text-silver transition-all duration-300 hover:-translate-y-1 hover:text-ink"
-                  >
-                    {p.name}
-                  </span>
-                ),
-              )}
+              {/* Single row on every screen — on phones the logos shrink
+                  and the gap tightens so both fit side by side instead of
+                  stacking. From sm up they return to full size and can
+                  wrap if there are many. */}
+              <div className="flex flex-nowrap items-center gap-x-5 gap-y-4 sm:flex-wrap sm:gap-x-8">
+                {data.partnerLogos.map((p, i) =>
+                  p.logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={`partner-${i}`}
+                      src={sanityThumb(p.logo, 320)}
+                      alt={p.name || ""}
+                      className="h-8 w-auto max-w-[130px] flex-shrink object-contain transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.06] sm:h-12 sm:max-w-[180px]"
+                    />
+                  ) : (
+                    <span
+                      key={`partner-${i}`}
+                      className="whitespace-nowrap font-mono text-[.72rem] font-semibold uppercase tracking-wider text-silver transition-all duration-300 hover:-translate-y-1 hover:text-ink sm:text-[.8rem]"
+                    >
+                      {p.name}
+                    </span>
+                  ),
+                )}
               </div>
             </div>
           ) : null}
