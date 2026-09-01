@@ -1,4 +1,4 @@
-import type { BookIntro } from "@/lib/content/defaults";
+import type { BookIntro, LeadFormContent } from "@/lib/content/defaults";
 import { LeadForm } from "@/components/LeadForm";
 import { BookingWidget } from "@/components/BookingWidget";
 import { Accent } from "@/components/ui/Accent";
@@ -14,9 +14,14 @@ import { SecMeta } from "@/components/SecMeta";
  */
 export function BookACall({
   intro,
+  leadForm,
   hideMeta = false,
 }: {
   intro: BookIntro;
+  /** Every visible string on the form itself — labels, placeholders,
+   * dropdown choices, submit button, confirmation message. Editable in
+   * Sanity → "Lead Form", right next to this section's own tab. */
+  leadForm: LeadFormContent;
   /** Hides the "SEC.0X // Contact — ALT ... FT" strip above the heading.
    * Used on the Case Studies page — see the matching note in
    * Testimonials.tsx for why. */
@@ -51,7 +56,7 @@ export function BookACall({
               </ul>
             ) : null}
           </div>
-          <LeadForm />
+          <LeadForm content={leadForm} />
         </Reveal>
 
         <BookingWidget />

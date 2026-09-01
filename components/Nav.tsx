@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import { sanityThumb } from "@/lib/sanity/imageUrl";
 
 /** Section ids that exist on BOTH the homepage and the New Sellers page
  * (they share the exact same section components). Everywhere else
@@ -26,7 +27,13 @@ const NAV_ITEMS: [string, string][] = [
   ["blog", "Blog"], // special-cased below — always its own page
 ];
 
-export function Nav() {
+export function Nav({
+  logo,
+  hideText = false,
+}: {
+  logo?: string;
+  hideText?: boolean;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -60,10 +67,24 @@ export function Nav() {
     >
       <div className="mx-auto flex max-w-[1240px] items-center justify-between px-6 py-4">
         <a href="/" className="flex items-center gap-2.5 font-display text-xl font-extrabold">
-          <HawkMark />
-          <span>
-            Peak<b className="text-ember">Hawks</b>
-          </span>
+          {logo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={sanityThumb(logo, 240)}
+              alt="PeakHawks"
+              className="h-8 w-auto max-w-[190px] object-contain"
+            />
+          ) : (
+            <HawkMark />
+          )}
+          {/* The wordmark stays next to an uploaded icon unless the client
+              says their logo already includes the brand name. With the
+              built-in hawk mark it always shows. */}
+          {!hideText && (
+            <span>
+              Peak<b className="text-ember">Hawks</b>
+            </span>
+          )}
         </a>
 
         {/* desktop links */}

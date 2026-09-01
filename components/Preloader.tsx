@@ -2,13 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { getGsap, prefersReducedMotion } from "@/lib/gsap";
+import { sanityThumb } from "@/lib/sanity/imageUrl";
 
 /**
  * Runs once on first load. Dispatches a `peakhawks:preloader-done` event
  * on <body> when finished — Hero listens for this to start its own
  * entrance timeline immediately after, exactly like the original mockup.
+ *
+ * `logo` is the same site-wide upload used in the nav bar (Sanity →
+ * Footer → "Site Logo"). When set, it replaces the hand-drawn hawk-feather
+ * SVG below with the uploaded image — carrying the `pre-feather` and
+ * `pre-mark` classes so it still picks up the exact same GSAP entrance
+ * (fade/rise in, then scale + glow) without any animation code changing.
  */
-export function Preloader() {
+export function Preloader({ logo }: { logo?: string }) {
   const [done, setDone] = useState(false);
   const [pct, setPct] = useState(0);
 
@@ -103,19 +110,29 @@ export function Preloader() {
       aria-label="Loading PeakHawks"
       className="fixed inset-0 z-[1000] flex flex-col items-center justify-center gap-8 bg-bg"
     >
-      <svg viewBox="0 0 48 48" className="pre-mark h-[110px] w-[110px] drop-shadow-[0_0_40px_rgba(234,92,0,.2)]">
-        {FEATHERS.map(([d, fill], i) => (
-          <path
-            key={i}
-            d={d}
-            fill={fill}
-            className="pre-feather"
-            style={{ opacity: 0, transform: "translate(-6px, 6px)" }}
-          />
-        ))}
-        <path d="M27 14 L34 12 L38 15 L33 19 L28 18 Z" fill="#F97316" className="pre-feather" style={{ opacity: 0 }} />
-        <path d="M34 12 L41 14 L37 16 Z" fill="#EA5C00" className="pre-feather" style={{ opacity: 0 }} />
-      </svg>
+      {logo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={sanityThumb(logo, 260)}
+          alt=""
+          className="pre-mark pre-feather h-[110px] w-[110px] object-contain drop-shadow-[0_0_40px_rgba(234,92,0,.2)]"
+          style={{ opacity: 0, transform: "translate(0, 6px)" }}
+        />
+      ) : (
+        <svg viewBox="0 0 48 48" className="pre-mark h-[110px] w-[110px] drop-shadow-[0_0_40px_rgba(234,92,0,.2)]">
+          {FEATHERS.map(([d, fill], i) => (
+            <path
+              key={i}
+              d={d}
+              fill={fill}
+              className="pre-feather"
+              style={{ opacity: 0, transform: "translate(-6px, 6px)" }}
+            />
+          ))}
+          <path d="M27 14 L34 12 L38 15 L33 19 L28 18 Z" fill="#F97316" className="pre-feather" style={{ opacity: 0 }} />
+          <path d="M34 12 L41 14 L37 16 Z" fill="#EA5C00" className="pre-feather" style={{ opacity: 0 }} />
+        </svg>
+      )}
 
       <div className="flex items-baseline gap-1.5 font-mono text-4xl font-bold text-ink">
         {pct}

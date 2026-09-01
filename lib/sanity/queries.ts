@@ -21,7 +21,11 @@ const PAGE_PROJECTION = `{
     videoUrl,
     "posterImage": posterImage.asset->url,
     "posterImageMobile": posterImageMobile.asset->url,
-    chips[] { value, label }
+    chips[] { value, label },
+    partnerLogos[] {
+      "name": @.name,
+      "logo": logo.asset->url
+    }
   },
   statsIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   stats[] { value, prefix, suffix, label },
@@ -64,6 +68,12 @@ const PAGE_PROJECTION = `{
   testimonialsIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   testimonials[] { quote, name, role, initials, rating, "avatar": avatar.asset->url },
   bookIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, body, steps },
+  leadForm {
+    nameLabel, namePlaceholder, emailLabel, emailPlaceholder,
+    revenueLabel, revenueOptions, productsLabel, productsOptions,
+    budgetLabel, budgetOptions, submitLabel, submitLoadingLabel,
+    successHeading, successBody
+  },
   faqIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   faq[] { q, a },
   cta { eyebrow, heading, headingAccent, sub, buttonLabel, buttonHref },
@@ -72,6 +82,8 @@ const PAGE_PROJECTION = `{
 
 /** The shared "Footer" singleton — one document for the whole site. */
 const FOOTER_PROJECTION = `{
+  "siteLogo": siteLogo.asset->url,
+  siteLogoHideText,
   brandNameStart,
   brandNameAccent,
   "logo": logo.asset->url,

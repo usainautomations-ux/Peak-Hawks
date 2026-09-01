@@ -69,6 +69,28 @@ export type BookIntro = {
   sectionNumber?: number;
 };
 
+/** Every visible string on the lead-capture form itself (components/LeadForm.tsx)
+ * — the fields to its right of "Book A Call"'s heading/steps. Field labels,
+ * placeholders, each dropdown's option list, the submit button (both its
+ * resting and "Sending…" states), and the confirmation shown after a
+ * successful submit. */
+export type LeadFormContent = {
+  nameLabel: string;
+  namePlaceholder: string;
+  emailLabel: string;
+  emailPlaceholder: string;
+  revenueLabel: string;
+  revenueOptions: string[];
+  productsLabel: string;
+  productsOptions: string[];
+  budgetLabel: string;
+  budgetOptions: string[];
+  submitLabel: string;
+  submitLoadingLabel: string;
+  successHeading: string;
+  successBody: string;
+};
+
 /** The final dark call-to-action band above the footer. */
 export type FinalCta = {
   eyebrow: string;
@@ -215,6 +237,11 @@ export type SiteContent = {
      * phones. Falls back to the desktop image when not set. */
     posterImageMobile?: string;
     chips: HeroChip[];
+    /** Small partner/certification marks under the CTA buttons — e.g.
+     * "Amazon Ads Verified Partner", "Amazon SPN". Same {name, logo?}
+     * shape as the Brand Logos strip, reused here for a couple of fixed
+     * badges rather than a scrolling marquee. */
+    partnerLogos: BrandLogo[];
   };
   brandsIntro: SectionIntro;
   brandLogos: BrandLogo[];
@@ -241,6 +268,7 @@ export type SiteContent = {
   testimonialsIntro: SectionIntro;
   testimonials: Testimonial[];
   bookIntro: BookIntro;
+  leadForm: LeadFormContent;
   faqIntro: SectionIntro;
   faq: FAQ[];
   cta: FinalCta;
@@ -267,6 +295,10 @@ export const defaultContent: SiteContent = {
       { value: "$28M+", label: "Generated" },
       { value: "40+", label: "Brands Scaled" },
       { value: "92%", label: "Launch Success" },
+    ],
+    partnerLogos: [
+      { name: "Amazon Ads Verified Partner" },
+      { name: "Amazon SPN" },
     ],
   },
   statsIntro: {
@@ -574,6 +606,30 @@ export const defaultContent: SiteContent = {
       "If it's a fit, we start scouting the same week",
     ],
   },
+  leadForm: {
+    nameLabel: "Name",
+    namePlaceholder: "Your name",
+    emailLabel: "Email",
+    emailPlaceholder: "you@brand.com",
+    revenueLabel: "Monthly Revenue on Amazon",
+    revenueOptions: [
+      "Haven't launched yet",
+      "$0 \u2013 $50k",
+      "$50k \u2013 $250k",
+      "$250k \u2013 $500k",
+      "$500k \u2013 $1M+",
+    ],
+    productsLabel: "Products Planned This Quarter",
+    productsOptions: ["1 product", "2 \u2013 5 products", "5 \u2013 10 products", "10+ products"],
+    budgetLabel: "Est. Launch Budget per Product",
+    budgetOptions: ["Less than $10k", "$10k \u2013 $30k", "$30k \u2013 $50k", "$50k+"],
+    submitLabel: "Book My Strategy Call",
+    submitLoadingLabel: "Sending\u2026",
+    successHeading: "You're in.",
+    successBody:
+      "We've got your details \u2014 the launch team will reach out within one business day.",
+  },
+
   faqIntro: {
     sectionLabel: "Questions",
     sectionNumber: 9,

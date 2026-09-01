@@ -132,6 +132,7 @@ export const pageContent = {
     { name: "process", title: "Process" },
     { name: "testimonials", title: "Testimonials" },
     { name: "bookACall", title: "Book A Call" },
+    { name: "leadForm", title: "Lead Form" },
     { name: "faq", title: "FAQ" },
     { name: "finalCta", title: "Final CTA" },
   ],
@@ -172,7 +173,30 @@ export const pageContent = {
           description: 'Which single word in the headline should be orange? e.g. "Engineered"' },
         { name: "subhead", title: "Subheading", type: "text", rows: 3 },
         { name: "note", title: "Small note below buttons", type: "string",
-          description: 'e.g. "PRODUCT-FIRST · TACOS-DRIVEN REPORTING"' },
+          description: 'e.g. "PRODUCT-FIRST · TACOS-DRIVEN REPORTING". Leave blank to hide this line \u2014 useful if you\'d rather only show the partner logos below.' },
+        {
+          name: "partnerLogos",
+          title: "Partner logos below the buttons",
+          type: "array",
+          description:
+            "Small badges under the \u201cBook a Strategy Call\u201d / \u201cSee the Case Studies\u201d " +
+            "buttons and the note line above \u2014 e.g. an Amazon Ads partner mark, an " +
+            "Amazon SPN badge. For each one you can type a name, upload a small logo " +
+            "image, or do both (the image is used, the name becomes its alt text). " +
+            "Add, remove, or reorder freely; leave the list empty to hide this row entirely.",
+          of: [{
+            type: "object",
+            name: "partnerLogo",
+            fields: [
+              { name: "name", title: "Name (text)", type: "string",
+                description: "Shown as text when no image is uploaded. Also used as the image's alt text." },
+              { name: "logo", title: "Logo image (optional)", type: "image",
+                options: { hotspot: true },
+                description: "Upload a small logo/badge image. A transparent PNG or SVG works best." },
+            ],
+            preview: { select: { title: "name", media: "logo" } },
+          }],
+        },
         { name: "videoUrl", title: "Hero media — video URL (optional)", type: "url",
           description: "Only fill this in if you have an actual video (YouTube, Vimeo, or a direct .mp4 link). If you just have a photo or graphic, leave this blank and use \"Hero image\" below instead." },
         { name: "posterImage", title: "Hero image (desktop)", type: "image",
@@ -532,6 +556,48 @@ export const pageContent = {
           description: "The 01 / 02 / 03 list under the paragraph. Numbering is automatic — add or remove freely." },
       ],
     }),
+
+    // ── LEAD FORM ──────────────────────────────────────────────────────
+    // Every visible string on the form itself, next to the Book A Call
+    // text above — field labels, placeholders, each dropdown's choices,
+    // the submit button (both states), and the after-submit confirmation.
+    {
+      name: "leadForm",
+      title: "Lead Form",
+      type: "object",
+      group: "leadForm",
+      options: { collapsible: false },
+      fields: [
+        { name: "nameLabel", title: "\"Name\" field label", type: "string" },
+        { name: "namePlaceholder", title: "\"Name\" field placeholder", type: "string" },
+        { name: "emailLabel", title: "\"Email\" field label", type: "string" },
+        { name: "emailPlaceholder", title: "\"Email\" field placeholder", type: "string" },
+
+        { name: "revenueLabel", title: "Revenue dropdown — label", type: "string" },
+        { name: "revenueOptions", title: "Revenue dropdown — choices", type: "array",
+          of: [{ type: "string" }],
+          description: "The first one shown is what's selected by default. Add, remove, or reorder freely." },
+
+        { name: "productsLabel", title: "Products dropdown — label", type: "string" },
+        { name: "productsOptions", title: "Products dropdown — choices", type: "array",
+          of: [{ type: "string" }],
+          description: "The first one shown is what's selected by default." },
+
+        { name: "budgetLabel", title: "Budget dropdown — label", type: "string" },
+        { name: "budgetOptions", title: "Budget dropdown — choices", type: "array",
+          of: [{ type: "string" }],
+          description: "The first one shown is what's selected by default." },
+
+        { name: "submitLabel", title: "Submit button text", type: "string",
+          description: 'e.g. "Book My Strategy Call"' },
+        { name: "submitLoadingLabel", title: "Submit button text while sending", type: "string",
+          description: 'Shown briefly right after someone clicks submit, e.g. "Sending\u2026"' },
+
+        { name: "successHeading", title: "Confirmation — heading", type: "string",
+          description: 'Shown after a successful submit, replacing the form, e.g. "You\'re in."' },
+        { name: "successBody", title: "Confirmation — message", type: "text", rows: 2 },
+      ],
+    },
 
     // ── FAQ ────────────────────────────────────────────────────────────
     sectionIntro({ name: "faqIntro", title: "FAQ — heading", group: "faq" }),

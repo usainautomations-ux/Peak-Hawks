@@ -23,6 +23,7 @@ export type SanityPageContent = {
     posterImage?: string;
     posterImageMobile?: string;
     chips?: Array<{ value: string; label: string }>;
+    partnerLogos?: Array<string | { name?: string; logo?: string }>;
   };
   statsIntro?: SanitySectionIntro;
   stats?: Array<{ value: number; prefix?: string; suffix: string; label: string }>;
@@ -116,6 +117,22 @@ export type SanityPageContent = {
     body?: string;
     steps?: string[];
   };
+  leadForm?: {
+    nameLabel?: string;
+    namePlaceholder?: string;
+    emailLabel?: string;
+    emailPlaceholder?: string;
+    revenueLabel?: string;
+    revenueOptions?: string[];
+    productsLabel?: string;
+    productsOptions?: string[];
+    budgetLabel?: string;
+    budgetOptions?: string[];
+    submitLabel?: string;
+    submitLoadingLabel?: string;
+    successHeading?: string;
+    successBody?: string;
+  };
   faqIntro?: SanitySectionIntro;
   faq?: Array<{ q: string; a: string }>;
   cta?: {
@@ -131,6 +148,8 @@ export type SanityPageContent = {
 
 /** The "Footer" singleton document — shared by every page. */
 export type SanityFooterContent = {
+  siteLogo?: string;
+  siteLogoHideText?: boolean;
   brandNameStart?: string;
   brandNameAccent?: string;
   logo?: string;

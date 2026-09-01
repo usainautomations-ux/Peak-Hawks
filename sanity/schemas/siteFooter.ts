@@ -12,21 +12,51 @@ export const siteFooter = {
   __experimental_actions: ["update", "publish"], // singleton — no create/delete
 
   groups: [
-    { name: "brand", title: "Logo & Tagline", default: true },
+    { name: "siteLogo", title: "Site Logo", default: true },
+    { name: "brand", title: "Footer Logo & Tagline" },
     { name: "columns", title: "Link Columns" },
     { name: "bottom", title: "Bottom Bar" },
     { name: "mobileCta", title: "Mobile Book Bar" },
   ],
 
   fields: [
-    // ── LOGO & TAGLINE ─────────────────────────────────────────────────
+    // ── SITE LOGO (header + loading screen) ─────────────────────────────
+    {
+      name: "siteLogo",
+      title: "Logo image",
+      type: "image",
+      group: "siteLogo",
+      options: { hotspot: true },
+      description:
+        "Replaces the hawk-mark ICON in the top navigation bar and the " +
+        "loading animation. By default the \u201cPeakHawks\u201d text stays right " +
+        "next to it \u2014 so upload just your icon/symbol here. Both spots sit " +
+        "on a light background, so use a dark or full-color logo (a white " +
+        "one would be invisible). Transparent PNG or SVG works best. Leave " +
+        "blank to keep the built-in hawk mark. (Separate from the Footer " +
+        "Logo below, which is for the footer\u2019s black background.)",
+    },
+    {
+      name: "siteLogoHideText",
+      title: "My logo already includes the brand name",
+      type: "boolean",
+      group: "siteLogo",
+      initialValue: false,
+      description:
+        "Leave OFF (default) to keep the \u201cPeakHawks\u201d text next to your " +
+        "uploaded logo \u2014 use this when you\u2019ve uploaded just an icon/symbol. " +
+        "Turn ON only if your uploaded image already has the words baked " +
+        "into it, so the text isn\u2019t shown twice.",
+    },
+
+    // ── FOOTER LOGO & TAGLINE ────────────────────────────────────────────
     {
       name: "logo",
-      title: "Logo image (optional)",
+      title: "Footer logo image (optional)",
       type: "image",
       group: "brand",
       description:
-        "Upload a logo to replace the hawk mark and the PeakHawks wordmark. Because the footer background is black, use a white or light transparent PNG/SVG. Leave blank to keep the built-in mark and wordmark below.",
+        "Upload a logo to replace the hawk mark and the PeakHawks wordmark in the footer specifically. Because the footer background is black, use a white or light transparent PNG/SVG. Leave blank to keep the built-in mark and wordmark below. (For the logo shown in the navigation bar and loading screen instead, see the \"Site Logo\" tab.)",
     },
     {
       name: "brandNameStart",

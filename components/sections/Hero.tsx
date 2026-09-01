@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { SiteContent } from "@/lib/content/defaults";
 import { getGsap, prefersReducedMotion } from "@/lib/gsap";
 import { Magnetic } from "@/components/Magnetic";
+import { sanityThumb } from "@/lib/sanity/imageUrl";
 
 /** Parses a hero video URL into an embeddable form — YouTube/Vimeo need
  * an iframe, direct files (.mp4 etc.) use a native <video> tag. A raw
@@ -253,9 +254,34 @@ export function Hero({ data }: { data: SiteContent["hero"] }) {
             </a>
           </div>
 
-          <p className="hero-note mt-5 font-mono text-[.72rem] tracking-wider text-grey">
-            // {data.note}
-          </p>
+          {data.note ? (
+            <p className="hero-note mt-5 font-mono text-[.72rem] tracking-wider text-grey">
+              // {data.note}
+            </p>
+          ) : null}
+
+          {data.partnerLogos?.length ? (
+            <div className="hero-note mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+              {data.partnerLogos.map((p, i) =>
+                p.logo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={`partner-${i}`}
+                    src={sanityThumb(p.logo, 240)}
+                    alt={p.name || ""}
+                    className="h-6 w-auto max-w-[130px] object-contain opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0 sm:h-7"
+                  />
+                ) : (
+                  <span
+                    key={`partner-${i}`}
+                    className="font-mono text-[.68rem] font-semibold uppercase tracking-wider text-grey"
+                  >
+                    {p.name}
+                  </span>
+                ),
+              )}
+            </div>
+          ) : null}
         </div>
 
         <div className="hero-media relative">

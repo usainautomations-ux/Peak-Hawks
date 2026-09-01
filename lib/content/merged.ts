@@ -111,6 +111,7 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
       posterImageMobile:
         sanity.hero?.posterImageMobile ?? base.hero.posterImageMobile,
       chips: sanity.hero?.chips?.length ? sanity.hero.chips : base.hero.chips,
+      partnerLogos: normaliseBrandLogos(sanity.hero?.partnerLogos, base.hero.partnerLogos),
     },
     statsIntro: overlayIntro(base.statsIntro, sanity.statsIntro),
     stats: sanity.stats?.length ? sanity.stats : base.stats,
@@ -210,6 +211,32 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
       body: sanity.bookIntro?.body ?? base.bookIntro.body,
       steps: sanity.bookIntro?.steps?.length ? sanity.bookIntro.steps : base.bookIntro.steps,
     },
+    leadForm: {
+      nameLabel: sanity.leadForm?.nameLabel?.trim() || base.leadForm.nameLabel,
+      namePlaceholder:
+        sanity.leadForm?.namePlaceholder?.trim() || base.leadForm.namePlaceholder,
+      emailLabel: sanity.leadForm?.emailLabel?.trim() || base.leadForm.emailLabel,
+      emailPlaceholder:
+        sanity.leadForm?.emailPlaceholder?.trim() || base.leadForm.emailPlaceholder,
+      revenueLabel: sanity.leadForm?.revenueLabel?.trim() || base.leadForm.revenueLabel,
+      revenueOptions: sanity.leadForm?.revenueOptions?.length
+        ? sanity.leadForm.revenueOptions
+        : base.leadForm.revenueOptions,
+      productsLabel: sanity.leadForm?.productsLabel?.trim() || base.leadForm.productsLabel,
+      productsOptions: sanity.leadForm?.productsOptions?.length
+        ? sanity.leadForm.productsOptions
+        : base.leadForm.productsOptions,
+      budgetLabel: sanity.leadForm?.budgetLabel?.trim() || base.leadForm.budgetLabel,
+      budgetOptions: sanity.leadForm?.budgetOptions?.length
+        ? sanity.leadForm.budgetOptions
+        : base.leadForm.budgetOptions,
+      submitLabel: sanity.leadForm?.submitLabel?.trim() || base.leadForm.submitLabel,
+      submitLoadingLabel:
+        sanity.leadForm?.submitLoadingLabel?.trim() || base.leadForm.submitLoadingLabel,
+      successHeading:
+        sanity.leadForm?.successHeading?.trim() || base.leadForm.successHeading,
+      successBody: sanity.leadForm?.successBody?.trim() || base.leadForm.successBody,
+    },
     faqIntro: overlayIntro(base.faqIntro, sanity.faqIntro),
     faq: sanity.faq?.length ? sanity.faq : base.faq,
     cta: {
@@ -277,6 +304,8 @@ export async function getMergedFooter(): Promise<FooterContent> {
     : footerDefaults.columns;
 
   return {
+    siteLogo: f.siteLogo,
+    siteLogoHideText: f.siteLogoHideText ?? footerDefaults.siteLogoHideText,
     brandNameStart: f.brandNameStart ?? footerDefaults.brandNameStart,
     brandNameAccent: f.brandNameAccent ?? footerDefaults.brandNameAccent,
     logo: f.logo,

@@ -17,10 +17,25 @@ export type FooterColumn = {
 };
 
 export type FooterContent = {
+  /** The site-wide logo used in the top navigation bar AND the loading
+   * animation shown when the site first opens (components/Preloader.tsx)
+   * — both sit on a light background. Optional: falls back to the
+   * built-in hawk mark + "PeakHawks" wordmark when not set. This is
+   * separate from `logo` below, which is the footer's own logo on its
+   * dark background — the two can be different images, or the same one,
+   * depending on what the client uploads. */
+  siteLogo?: string;
+  /** When a siteLogo is uploaded, this decides whether the "PeakHawks"
+   * wordmark still shows next to it. Default false = keep the text (the
+   * upload just replaces the hawk-mark icon). Set true only if your
+   * uploaded logo already includes the brand name baked into the image. */
+  siteLogoHideText?: boolean;
   /** The wordmark next to the hawk mark. Split so "Hawks" can stay orange. */
   brandNameStart: string;
   brandNameAccent: string;
-  /** Optional uploaded logo — replaces the hawk mark + wordmark entirely. */
+  /** Optional uploaded logo — replaces the hawk mark + wordmark entirely,
+   * in the FOOTER only (dark background). See `siteLogo` above for the
+   * nav bar + loading screen. */
   logo?: string;
   /** The paragraph under the logo. */
   tagline: string;

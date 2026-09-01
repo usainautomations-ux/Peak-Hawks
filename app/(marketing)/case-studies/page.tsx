@@ -96,7 +96,7 @@ export default async function CaseStudiesPage() {
       </div>
 
       <Testimonials items={content.testimonials} intro={content.testimonialsIntro} hideMeta />
-      <BookACall intro={content.bookIntro} hideMeta />
+      <BookACall intro={content.bookIntro} leadForm={content.leadForm} hideMeta />
     </main>
   );
 }

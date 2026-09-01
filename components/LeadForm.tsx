@@ -2,28 +2,19 @@
 
 import { useState } from "react";
 import { Dropdown } from "@/components/ui/Dropdown";
-
-const REVENUE = [
-  "Haven't launched yet",
-  "$0 – $50k",
-  "$50k – $250k",
-  "$250k – $500k",
-  "$500k – $1M+",
-];
-const PRODUCTS = ["1 product", "2 – 5 products", "5 – 10 products", "10+ products"];
-const BUDGET = ["Less than $10k", "$10k – $30k", "$30k – $50k", "$50k+"];
+import type { LeadFormContent } from "@/lib/content/defaults";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function LeadForm() {
+export function LeadForm({ content }: { content: LeadFormContent }) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
-    revenue: REVENUE[0],
-    products: PRODUCTS[0],
-    budget: BUDGET[0],
+    revenue: content.revenueOptions[0] ?? "",
+    products: content.productsOptions[0] ?? "",
+    budget: content.budgetOptions[0] ?? "",
     website: "", // honeypot
   });
 
@@ -63,11 +54,8 @@ export function LeadForm() {
         <div className="flex h-14 w-14 items-center justify-center rounded-full border border-ember/40 bg-ember/10 text-2xl text-ember">
           ✓
         </div>
-        <p className="font-display text-lg font-bold">You&apos;re in.</p>
-        <p className="max-w-xs text-sm text-grey">
-          We&apos;ve got your details — the launch team will reach out within
-          one business day.
-        </p>
+        <p className="font-display text-lg font-bold">{content.successHeading}</p>
+        <p className="max-w-xs text-sm text-grey">{content.successBody}</p>
       </div>
     );
   }
@@ -75,36 +63,36 @@ export function LeadForm() {
   return (
     <form onSubmit={handleSubmit} noValidate>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Name">
+        <Field label={content.nameLabel}>
           <input
             type="text"
             required
             value={form.name}
             onChange={(e) => set("name")(e.target.value)}
-            placeholder="Your name"
+            placeholder={content.namePlaceholder}
             className={inputCls}
           />
         </Field>
-        <Field label="Email">
+        <Field label={content.emailLabel}>
           <input
             type="email"
             required
             value={form.email}
             onChange={(e) => set("email")(e.target.value)}
-            placeholder="you@brand.com"
+            placeholder={content.emailPlaceholder}
             className={inputCls}
           />
         </Field>
       </div>
 
-      <Field label="Monthly Revenue on Amazon">
-        <Dropdown options={REVENUE} value={form.revenue} onChange={set("revenue")} />
+      <Field label={content.revenueLabel}>
+        <Dropdown options={content.revenueOptions} value={form.revenue} onChange={set("revenue")} />
       </Field>
-      <Field label="Products Planned This Quarter">
-        <Dropdown options={PRODUCTS} value={form.products} onChange={set("products")} />
+      <Field label={content.productsLabel}>
+        <Dropdown options={content.productsOptions} value={form.products} onChange={set("products")} />
       </Field>
-      <Field label="Est. Launch Budget per Product">
-        <Dropdown options={BUDGET} value={form.budget} onChange={set("budget")} />
+      <Field label={content.budgetLabel}>
+        <Dropdown options={content.budgetOptions} value={form.budget} onChange={set("budget")} />
       </Field>
 
       {/* honeypot — visually hidden, bots fill it */}
@@ -124,7 +112,7 @@ export function LeadForm() {
         disabled={status === "submitting"}
         className="btn-primary mt-2 w-full justify-center disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {status === "submitting" ? "Sending…" : "Book My Strategy Call"}
+        {status === "submitting" ? content.submitLoadingLabel : content.submitLabel}
         {status !== "submitting" && <span className="arrow">→</span>}
       </button>
 

@@ -29,6 +29,10 @@ export const newSellerDefaults: SiteContent = {
       { value: "90d", label: "To First Sale" },
       { value: "100%", label: "Data-Checked" },
     ],
+    partnerLogos: [
+      { name: "Amazon Ads Verified Partner" },
+      { name: "Amazon SPN" },
+    ],
   },
   brandsIntro: {
     sectionLabel: "Clients",
@@ -330,6 +334,30 @@ export const newSellerDefaults: SiteContent = {
       "If it's a fit, we start scouting the same week",
     ],
   },
+  leadForm: {
+    nameLabel: "Name",
+    namePlaceholder: "Your name",
+    emailLabel: "Email",
+    emailPlaceholder: "you@brand.com",
+    revenueLabel: "Monthly Revenue on Amazon",
+    revenueOptions: [
+      "Haven't launched yet",
+      "$0 \u2013 $50k",
+      "$50k \u2013 $250k",
+      "$250k \u2013 $500k",
+      "$500k \u2013 $1M+",
+    ],
+    productsLabel: "Products Planned This Quarter",
+    productsOptions: ["1 product", "2 \u2013 5 products", "5 \u2013 10 products", "10+ products"],
+    budgetLabel: "Est. Launch Budget per Product",
+    budgetOptions: ["Less than $10k", "$10k \u2013 $30k", "$30k \u2013 $50k", "$50k+"],
+    submitLabel: "Book My Strategy Call",
+    submitLoadingLabel: "Sending\u2026",
+    successHeading: "You're in.",
+    successBody:
+      "We've got your details \u2014 the launch team will reach out within one business day.",
+  },
+
   faqIntro: {
     sectionLabel: "Questions",
     sectionNumber: 9,
