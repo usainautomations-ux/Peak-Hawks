@@ -327,5 +327,8 @@ export async function getMergedFooter(): Promise<FooterContent> {
     mobileCtaLabel: f.mobileCtaLabel?.trim()
       ? f.mobileCtaLabel
       : footerDefaults.mobileCtaLabel,
+    // Blank in the Studio means "no widget" — so an empty string is a
+    // deliberate override, not a reason to fall back to the default.
+    chatWidgetId: f.chatWidgetId !== undefined ? f.chatWidgetId : footerDefaults.chatWidgetId,
   };
 }

@@ -165,6 +165,7 @@ export type SanityFooterContent = {
   copyright?: string;
   legalLabels?: { terms?: string; privacy?: string; disclaimer?: string };
   mobileCtaLabel?: string;
+  chatWidgetId?: string;
 };
 
 export type SanityCaseStudyListItem = {

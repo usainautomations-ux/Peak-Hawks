@@ -17,6 +17,7 @@ export const siteFooter = {
     { name: "columns", title: "Link Columns" },
     { name: "bottom", title: "Bottom Bar" },
     { name: "mobileCta", title: "Mobile Book Bar" },
+    { name: "chat", title: "Chat Widget" },
   ],
 
   fields: [
@@ -173,6 +174,19 @@ export const siteFooter = {
         "of the screen on phones and tablets, across every page (Homepage, New " +
         "Sellers, Blog, Case Studies). One shared value \u2014 it's the same bar " +
         "everywhere, not per-page content.",
+    },
+    // ── CHAT WIDGET ──────────────────────────────────────────────────
+    {
+      name: "chatWidgetId",
+      title: "GoHighLevel chat widget ID",
+      type: "string",
+      group: "chat",
+      description:
+        "Paste ONLY the widget ID from your GHL chat widget embed code \u2014 " +
+        "the value inside data-widget-id=\"...\" (e.g. 6998d6fb95fbc5e1dc73749f), " +
+        "not the whole <script> tag. This loads the GHL chat bubble on every " +
+        "page. To swap in a different widget, paste its ID here. To turn the " +
+        "chat off completely, clear this field and publish.",
     },
   ],
 

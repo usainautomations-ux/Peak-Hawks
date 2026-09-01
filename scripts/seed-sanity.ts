@@ -181,6 +181,7 @@ function toFooterDoc() {
     copyright: footerDefaults.copyright,
     legalLabels: footerDefaults.legalLabels,
     mobileCtaLabel: footerDefaults.mobileCtaLabel,
+    chatWidgetId: footerDefaults.chatWidgetId,
   };
 }
 

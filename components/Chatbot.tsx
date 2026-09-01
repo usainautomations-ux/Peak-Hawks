@@ -43,6 +43,19 @@ function reply(q: string): { text: string; chips?: string[]; askEmail?: boolean 
 
 export function Chatbot() {
   const [open, setOpen] = useState(false);
+  // If the GoHighLevel chat widget is active (its ID is set in Sanity →
+  // Footer → Chat Widget), hide this built-in bot so the two bubbles don't
+  // stack in the same corner. Detected at runtime by looking for the GHL
+  // loader script, so the pages don't need to thread footer data down.
+  const [ghlActive, setGhlActive] = useState(false);
+  useEffect(() => {
+    const check = () =>
+      setGhlActive(!!document.getElementById("ghl-chat-widget"));
+    check();
+    // The GHL script is injected after interactive, so re-check shortly.
+    const t = window.setTimeout(check, 1500);
+    return () => window.clearTimeout(t);
+  }, []);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [chips, setChips] = useState<string[]>([]);
   const [typing, setTyping] = useState(false);
@@ -126,6 +139,9 @@ export function Chatbot() {
     if (r.askEmail) setAwaitingEmail(true);
     pushBot(r.text, r.chips ?? []);
   }
+
+  // GHL widget is running — don't render the built-in bot.
+  if (ghlActive) return null;
 
   return (
     <>

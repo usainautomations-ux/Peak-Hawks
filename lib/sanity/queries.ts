@@ -95,7 +95,8 @@ const FOOTER_PROJECTION = `{
   wordmark,
   copyright,
   legalLabels { terms, privacy, disclaimer },
-  mobileCtaLabel
+  mobileCtaLabel,
+  chatWidgetId
 }`;
 
 /**

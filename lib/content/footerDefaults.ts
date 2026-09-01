@@ -56,6 +56,10 @@ export type FooterContent = {
    * components/MobileBookCTA.tsx. One shared value since the bar itself
    * is one shared, site-wide element, not per-page content. */
   mobileCtaLabel: string;
+  /** GoHighLevel chat widget ID. Paste just the data-widget-id value from
+   * GHL's embed snippet. Blank = no chat widget loads. Lets the client
+   * swap widgets or turn chat off without a code change. */
+  chatWidgetId?: string;
 };
 
 /**
@@ -105,4 +109,5 @@ export const footerDefaults: FooterContent = {
   copyright: "© {year} PEAKHAWKS. ALL RIGHTS RESERVED.",
   legalLabels: { terms: "TERMS", privacy: "PRIVACY", disclaimer: "DISCLAIMER" },
   mobileCtaLabel: "Book a Strategy Call",
+  chatWidgetId: "6998d6fb95fbc5e1dc73749f",
 };
