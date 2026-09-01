@@ -45,13 +45,16 @@ export function Footer({ data }: { data: FooterContent }) {
                   className="h-8 w-auto max-w-[220px] object-contain"
                 />
               ) : (
-                <>
-                  <HawkMark />
-                  <span>
-                    {data.brandNameStart}
-                    <b className="text-ember">{data.brandNameAccent}</b>
-                  </span>
-                </>
+                <HawkMark />
+              )}
+              {/* Wordmark stays next to an uploaded footer logo unless the
+                  client says their image already includes the brand name.
+                  Matches the nav bar's behaviour. */}
+              {!data.logoHideText && (
+                <span>
+                  {data.brandNameStart}
+                  <b className="text-ember">{data.brandNameAccent}</b>
+                </span>
               )}
             </a>
             {data.tagline ? (

@@ -155,6 +155,7 @@ export type SanityFooterContent = {
   brandNameStart?: string;
   brandNameAccent?: string;
   logo?: string;
+  logoHideText?: boolean;
   tagline?: string;
   columns?: Array<{
     title?: string;

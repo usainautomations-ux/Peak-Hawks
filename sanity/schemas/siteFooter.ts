@@ -56,7 +56,16 @@ export const siteFooter = {
       type: "image",
       group: "brand",
       description:
-        "Upload a logo to replace the hawk mark and the PeakHawks wordmark in the footer specifically. Because the footer background is black, use a white or light transparent PNG/SVG. Leave blank to keep the built-in mark and wordmark below. (For the logo shown in the navigation bar and loading screen instead, see the \"Site Logo\" tab.)",
+        "Replaces the hawk-mark ICON in the footer. By default the \u201cPeakHawks\u201d text stays next to it \u2014 upload just your icon/symbol here. Because the footer background is black, use a white or light transparent PNG/SVG. Leave blank to keep the built-in mark. (For the navigation bar / loading screen logo, see the \"Site Logo\" tab.)",
+    },
+    {
+      name: "logoHideText",
+      title: "My footer logo already includes the brand name",
+      type: "boolean",
+      group: "brand",
+      initialValue: false,
+      description:
+        "Leave OFF (default) to keep the \u201cPeakHawks\u201d text next to your uploaded footer logo. Turn ON only if your uploaded image already has the words baked in, so the text isn\u2019t shown twice.",
     },
     {
       name: "brandNameStart",

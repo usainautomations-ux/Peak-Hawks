@@ -89,6 +89,7 @@ const FOOTER_PROJECTION = `{
   brandNameStart,
   brandNameAccent,
   "logo": logo.asset->url,
+  logoHideText,
   tagline,
   columns[] { title, links[] { label, href } },
   wordmark,

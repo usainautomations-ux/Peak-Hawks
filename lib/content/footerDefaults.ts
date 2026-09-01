@@ -37,6 +37,10 @@ export type FooterContent = {
    * in the FOOTER only (dark background). See `siteLogo` above for the
    * nav bar + loading screen. */
   logo?: string;
+  /** When a footer logo is uploaded, keep the "PeakHawks" wordmark next
+   * to it (default) or hide it if the uploaded image already includes the
+   * brand name. Mirrors siteLogoHideText for the header. */
+  logoHideText?: boolean;
   /** The paragraph under the logo. */
   tagline: string;
   /** The link columns. Add, remove or reorder freely in the Studio. */
