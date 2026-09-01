@@ -242,6 +242,13 @@ export type SiteContent = {
      * shape as the Brand Logos strip, reused here for a couple of fixed
      * badges rather than a scrolling marquee. */
     partnerLogos: BrandLogo[];
+    /** Optional label shown above the partner logos, e.g.
+     * "Trusted & certified". Blank hides it. */
+    partnerLogosLabel?: string;
+    /** How the logo images are tinted at rest: "muted" (greyed, the
+     * default), "mono" (fully black/ink), or "full" (original colors).
+     * They always brighten to full color on hover. */
+    partnerLogosStyle?: "muted" | "mono" | "full";
   };
   brandsIntro: SectionIntro;
   brandLogos: BrandLogo[];
@@ -300,6 +307,8 @@ export const defaultContent: SiteContent = {
       { name: "Amazon Ads Verified Partner" },
       { name: "Amazon SPN" },
     ],
+    partnerLogosLabel: "Trusted & Certified",
+    partnerLogosStyle: "muted",
   },
   statsIntro: {
     sectionLabel: "Proof",

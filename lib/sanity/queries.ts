@@ -25,7 +25,9 @@ const PAGE_PROJECTION = `{
     partnerLogos[] {
       "name": @.name,
       "logo": logo.asset->url
-    }
+    },
+    partnerLogosLabel,
+    partnerLogosStyle
   },
   statsIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   stats[] { value, prefix, suffix, label },

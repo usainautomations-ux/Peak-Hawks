@@ -33,6 +33,8 @@ export const newSellerDefaults: SiteContent = {
       { name: "Amazon Ads Verified Partner" },
       { name: "Amazon SPN" },
     ],
+    partnerLogosLabel: "Trusted & Certified",
+    partnerLogosStyle: "muted",
   },
   brandsIntro: {
     sectionLabel: "Clients",

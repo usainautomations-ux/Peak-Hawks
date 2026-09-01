@@ -24,6 +24,8 @@ export type SanityPageContent = {
     posterImageMobile?: string;
     chips?: Array<{ value: string; label: string }>;
     partnerLogos?: Array<string | { name?: string; logo?: string }>;
+    partnerLogosLabel?: string;
+    partnerLogosStyle?: "muted" | "mono" | "full";
   };
   statsIntro?: SanitySectionIntro;
   stats?: Array<{ value: number; prefix?: string; suffix: string; label: string }>;

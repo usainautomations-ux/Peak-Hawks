@@ -261,25 +261,50 @@ export function Hero({ data }: { data: SiteContent["hero"] }) {
           ) : null}
 
           {data.partnerLogos?.length ? (
-            <div className="hero-note mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
-              {data.partnerLogos.map((p, i) =>
-                p.logo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={`partner-${i}`}
-                    src={sanityThumb(p.logo, 240)}
-                    alt={p.name || ""}
-                    className="h-6 w-auto max-w-[130px] object-contain opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0 sm:h-7"
-                  />
-                ) : (
-                  <span
-                    key={`partner-${i}`}
-                    className="font-mono text-[.68rem] font-semibold uppercase tracking-wider text-grey"
-                  >
-                    {p.name}
-                  </span>
-                ),
-              )}
+            <div className="hero-note mt-6">
+              {data.partnerLogosLabel ? (
+                <p className="mb-2.5 flex items-center gap-2 font-mono text-[.6rem] font-semibold uppercase tracking-[.2em] text-grey/80">
+                  <span className="h-px w-5 bg-line-strong" />
+                  {data.partnerLogosLabel}
+                </p>
+              ) : null}
+              {/* Grouped "trust bar": each logo in its own soft pill, the
+                  whole set in a subtle rounded container so it reads as a
+                  deliberate row rather than a few images floating loose.
+                  Wraps to new lines cleanly, so more logos just fill in. */}
+              <div className="inline-flex flex-wrap items-center gap-2 rounded-2xl border border-line/70 bg-white/50 p-2 backdrop-blur-sm">
+                {data.partnerLogos.map((p, i) => {
+                  const restStyle =
+                    data.partnerLogosStyle === "full"
+                      ? "opacity-90"
+                      : data.partnerLogosStyle === "mono"
+                        ? "opacity-80 grayscale contrast-[1.35] brightness-0"
+                        : "opacity-60 grayscale";
+                  return (
+                    <div
+                      key={`partner-${i}`}
+                      className="group/plogo flex items-center rounded-xl px-3.5 py-2 transition-all duration-300 hover:bg-white hover:shadow-[0_6px_20px_-8px_rgba(21,23,26,.28)]"
+                    >
+                      {p.logo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={sanityThumb(p.logo, 240)}
+                          alt={p.name || ""}
+                          className={[
+                            "h-6 w-auto max-w-[120px] object-contain transition-all duration-300 sm:h-7",
+                            restStyle,
+                            "group-hover/plogo:opacity-100 group-hover/plogo:grayscale-0 group-hover/plogo:brightness-100 group-hover/plogo:-translate-y-0.5 group-hover/plogo:scale-[1.04]",
+                          ].join(" ")}
+                        />
+                      ) : (
+                        <span className="font-mono text-[.7rem] font-semibold uppercase tracking-wider text-grey transition-all duration-300 group-hover/plogo:-translate-y-0.5 group-hover/plogo:text-ink">
+                          {p.name}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           ) : null}
         </div>

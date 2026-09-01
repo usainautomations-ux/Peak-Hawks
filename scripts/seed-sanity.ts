@@ -76,6 +76,8 @@ function toSanityDoc(id: string, content: SiteContent) {
       partnerLogos: withKeys(
         content.hero.partnerLogos.map(({ name }) => ({ _type: "partnerLogo", name })),
       ),
+      partnerLogosLabel: content.hero.partnerLogosLabel,
+      partnerLogosStyle: content.hero.partnerLogosStyle,
     },
     statsIntro: content.statsIntro,
     stats: withKeys(content.stats),
