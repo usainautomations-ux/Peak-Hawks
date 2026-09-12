@@ -67,6 +67,10 @@ export type BookIntro = {
   steps: string[];
   /** See SectionIntro.sectionNumber above — same field, same purpose. */
   sectionNumber?: number;
+  /** Paste a GoHighLevel form embed URL to show YOUR GHL form here
+   * (so submissions run through that form's automations) instead of the
+   * built-in custom form. Blank = the built-in form is used. */
+  formEmbedUrl?: string;
 };
 
 /** Every visible string on the lead-capture form itself (components/LeadForm.tsx)

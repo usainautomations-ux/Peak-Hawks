@@ -214,6 +214,7 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
       headingAccent: sanity.bookIntro?.headingAccent ?? base.bookIntro.headingAccent,
       body: sanity.bookIntro?.body ?? base.bookIntro.body,
       steps: sanity.bookIntro?.steps?.length ? sanity.bookIntro.steps : base.bookIntro.steps,
+      formEmbedUrl: sanity.bookIntro?.formEmbedUrl ?? base.bookIntro.formEmbedUrl,
     },
     leadForm: {
       nameLabel: sanity.leadForm?.nameLabel?.trim() || base.leadForm.nameLabel,

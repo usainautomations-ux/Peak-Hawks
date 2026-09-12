@@ -178,7 +178,7 @@ export function Hero({ data }: { data: SiteContent["hero"] }) {
     <header
       ref={rootRef}
       id="top"
-      className="relative flex items-center overflow-hidden py-12 lg:py-16"
+      className="relative flex items-center overflow-hidden py-14 lg:min-h-[calc(100svh_-_118px)] lg:py-20"
     >
       {/* background: contour lines + drifting feather polygons */}
       <div aria-hidden className="pointer-events-none absolute inset-0">

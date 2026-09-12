@@ -118,6 +118,7 @@ export type SanityPageContent = {
     headingAccent?: string;
     body?: string;
     steps?: string[];
+    formEmbedUrl?: string;
   };
   leadForm?: {
     nameLabel?: string;

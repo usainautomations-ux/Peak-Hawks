@@ -69,7 +69,7 @@ const PAGE_PROJECTION = `{
   process[] { tag, title, body },
   testimonialsIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, subhead },
   testimonials[] { quote, name, role, initials, rating, "avatar": avatar.asset->url },
-  bookIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, body, steps },
+  bookIntro { sectionLabel, sectionNumber, eyebrow, heading, headingAccent, body, steps, formEmbedUrl },
   leadForm {
     nameLabel, namePlaceholder, emailLabel, emailPlaceholder,
     revenueLabel, revenueOptions, productsLabel, productsOptions,

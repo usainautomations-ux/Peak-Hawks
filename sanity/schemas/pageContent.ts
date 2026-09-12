@@ -556,6 +556,13 @@ export const pageContent = {
         { name: "body", title: "Paragraph", type: "text", rows: 3 },
         { name: "steps", title: "Numbered checklist", type: "array", of: [{ type: "string" }],
           description: "The 01 / 02 / 03 list under the paragraph. Numbering is automatic — add or remove freely." },
+        { name: "formEmbedUrl", title: "Use my own GHL form (optional)", type: "url",
+          description:
+            "Paste a GoHighLevel form EMBED URL to show your own GHL form here instead " +
+            "of the built-in form \u2014 so submissions run through that form\u2019s automations. " +
+            "In GHL: Sites \u2192 Forms \u2192 your form \u2192 Integrate/Embed, and copy the URL inside " +
+            "the iframe\u2019s src (looks like https://api.leadconnectorhq.com/widget/form/XXXX " +
+            "or https://link.\u2026/widget/form/XXXX). Leave blank to keep the built-in form." },
       ],
     }),
 

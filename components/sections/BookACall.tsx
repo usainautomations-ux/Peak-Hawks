@@ -1,5 +1,6 @@
 import type { BookIntro, LeadFormContent } from "@/lib/content/defaults";
 import { LeadForm } from "@/components/LeadForm";
+import { GhlFormEmbed } from "@/components/GhlFormEmbed";
 import { BookingWidget } from "@/components/BookingWidget";
 import { Accent } from "@/components/ui/Accent";
 import { Eyebrow } from "@/components/Eyebrow";
@@ -56,7 +57,13 @@ export function BookACall({
               </ul>
             ) : null}
           </div>
-          <LeadForm content={leadForm} />
+          {/* If a GHL form URL is set in Sanity, show that form here (its
+              own automations run on submit); otherwise the built-in form. */}
+          {intro.formEmbedUrl ? (
+            <GhlFormEmbed url={intro.formEmbedUrl} title={intro.heading} />
+          ) : (
+            <LeadForm content={leadForm} />
+          )}
         </Reveal>
 
         <BookingWidget />
