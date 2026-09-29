@@ -205,9 +205,21 @@ just without an auto-created deal.
 `Settings → Custom Fields` — create a **text** field for each question the
 form asks beyond name and email. Out of the box that's three:
 
-- `monthly_amazon_revenue`
-- `products_planned_quarter`
-- `launch_budget_per_product`
+| Key | Asked on |
+|---|---|
+| `monthly_amazon_revenue` | both pages |
+| `products_planned_quarter` | both pages |
+| `launch_budget_per_product` | both pages |
+| `product_currently_advertised` | homepage only |
+| `amazon_stage` | New Sellers page only |
+
+The last two are deliberately **separate fields, not one shared field**.
+A visitor who hasn't launched has nothing currently advertised, so the
+New Sellers page asks where they are in their journey instead. Pointing
+both at one key would leave a column holding product names for one
+audience and stage labels for the other — impossible to filter or report
+on. Tags (`established-seller` / `new-seller`) are what tell the two
+audiences apart.
 
 Which questions exist, and which custom field key each one writes to, is
 set per page in the Studio (`/studio` → Homepage or New Sellers Page →
