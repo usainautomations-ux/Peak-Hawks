@@ -126,6 +126,38 @@ Visitor → Next.js (Vercel) → /api/* route → GHL API v2 → CRM + automatio
 
 ---
 
+## 0.5 Icons / favicon — read before changing them
+
+The three icon files live in `app/` and **only** in `app/`:
+
+| File | What it is |
+|---|---|
+| `app/favicon.ico` | multi-resolution ICO (16–256px), legacy tabs and bookmarks |
+| `app/icon.svg` | the same mark as SVG — what modern browsers actually use |
+| `app/apple-icon.png` | 180×180, iOS home screen |
+
+All three are the `HawkMark` from `components/Nav.tsx` — the logo the site
+shows — on the brand's dark rounded square, so the mark stays legible
+against a white browser tab.
+
+Two traps that have already cost one round of "we updated it and nothing
+happened":
+
+1. **`favicon.ico` is only honoured at the root of `app/`.** Next.js
+   ignores it anywhere else, including inside a route group like
+   `app/(marketing)/`. A copy sitting there does nothing, and a copy in
+   the repository root does nothing either (there is no `public/`).
+2. **It has to actually be an ICO.** Renaming a `.jpg` to `.ico` produces
+   a file browsers refuse. Check with `file app/favicon.ico` — it should
+   say "MS Windows icon resource", not "JPEG image data".
+
+To regenerate all three from the logo, rasterise `HawkMark`'s paths at
+16/32/48/64/128/256 and pack them into an ICO. And when testing, remember
+browsers cache `/favicon.ico` very aggressively — use a hard reload or a
+private window before concluding it didn't work.
+
+---
+
 ## 1. Install
 
 ```bash

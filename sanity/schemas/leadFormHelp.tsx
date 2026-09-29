@@ -133,9 +133,53 @@ export const ghlFieldHelp = (
     </div>
 
     <div style={box}>
-      Reusing an existing field is fine — paste the key of a field you already
-      have and answers land there. Two questions pointing at the same key will
-      overwrite each other, so give each its own field.
+      <strong>Answers stopped appearing in a field that used to work?</strong>{" "}
+      That almost always means the field was renamed or deleted in
+      GoHighLevel, which changes or destroys its key while this box still
+      points at the old one. To fix it:
+      <ol style={list}>
+        <li>
+          In GoHighLevel, check <strong>Settings → Custom Fields</strong> — is
+          the field still there?
+        </li>
+        <li>
+          If it was deleted, create it again (Text type). Then copy its key:
+          it may <em>not</em> be the same as before, so copy it rather than
+          retyping the old one from memory.
+        </li>
+        <li>Paste the new key here and Publish this page.</li>
+        <li>
+          Do the same on the <strong>other</strong> page if it asks the same
+          question — each page has its own list, so fixing one does not fix
+          the other.
+        </li>
+      </ol>
+      <p style={{ margin: "0.6em 0 0" }}>
+        Note that deleting a custom field in GoHighLevel also deletes the
+        answers already stored in it on every contact, and recreating the
+        field does not bring them back. Any submissions that came in while
+        the field was missing are still readable on each contact’s timeline
+        note.
+      </p>
+    </div>
+
+    <div style={box}>
+      <strong>Can both pages use the same field?</strong> Yes — custom fields
+      belong to the GoHighLevel account, not to a page or a form, so the
+      homepage and the New Sellers page can both point at one key and it
+      works.
+      <p style={{ margin: "0.5em 0 0" }}>
+        Only do it when both pages are asking the <em>same</em> question. A
+        contact holds one value per field, so if someone submits both forms
+        the second answer overwrites the first, and if the two pages ask
+        different questions you can no longer tell which one the value
+        answers. Different question → give it its own field.
+      </p>
+      <p style={{ margin: "0.5em 0 0" }}>
+        To tell the two audiences apart in GoHighLevel, use the{" "}
+        <strong>Tags</strong> setting further down this tab rather than
+        separate fields — that is exactly what it is for.
+      </p>
     </div>
   </div>
 );
