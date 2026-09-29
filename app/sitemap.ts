@@ -4,8 +4,8 @@ import { getAllMergedCaseStudySlugs } from "@/lib/content/caseStudyMerged";
 
 /**
  * Generates /sitemap.xml — every static page plus every blog post and
- * case study (Sanity-backed and default/fallback ones alike, since the
- * defaults render real, working pages too).
+ * every case study that's actually live: published, not hidden, and past
+ * its publish date (see VISIBLE_CASE_STUDY in lib/sanity/queries.ts).
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const site = process.env.NEXT_PUBLIC_SITE_URL ?? "https://peakhawks.com";

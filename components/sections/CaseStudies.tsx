@@ -7,9 +7,10 @@ import { Reveal } from "@/components/Reveal";
 import { SecMeta } from "@/components/SecMeta";
 
 /** Dark accent section — matches the HTML mockup's inverted case-studies band.
- * Cards link to their own /case-studies/[slug] page when the case study is
- * backed by a real Sanity document (has a slug); fallback/demo content
- * without a matching page renders as a plain, non-linked card instead. */
+ * Shows the case studies with this page toggled on under "Show on landing
+ * page(s)" in Sanity; the whole section hides itself when there are none.
+ * A card links to its own /case-studies/[slug] page, falling back to a
+ * plain non-linked card if a slug is ever missing. */
 export function CaseStudies({
   items,
   intro,

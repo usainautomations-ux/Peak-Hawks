@@ -1,8 +1,9 @@
 /**
  * Seeds Sanity with the current default content, so opening the Studio
- * shows real, editable copy instead of blank forms — including real
- * case study documents (with "Show on landing page(s)" already toggled
- * on), not just page text.
+ * shows real, editable copy instead of blank forms.
+ *
+ * Page text only — case studies and blog posts are not seeded, since
+ * placeholder ones would land on the live site as blank cards.
  *
  * Safe to run more than once — uses `createIfNotExists`, so it will NEVER
  * overwrite a document that already exists (i.e. it won't clobber any
@@ -23,7 +24,7 @@ import "./loadEnv";
 
 import { createClient } from "@sanity/client";
 import { randomUUID } from "node:crypto";
-import { defaultContent, type SiteContent, type CaseStudy } from "../lib/content/defaults";
+import { defaultContent, type SiteContent } from "../lib/content/defaults";
 import { newSellerDefaults } from "../lib/content/newSellerDefaults";
 import { footerDefaults } from "../lib/content/footerDefaults";
 
@@ -56,8 +57,7 @@ function withKeys<T extends object>(items: T[]): (T & { _key: string })[] {
  * testimonials[].avatar) are intentionally omitted — they're Sanity asset
  * references, not plain strings, so they can't be seeded without actually
  * uploading files. They'll show as empty upload slots in the Studio,
- * exactly as they do today. Case studies are NOT part of this document —
- * see toCaseStudyDoc() below, they're seeded as their own documents. */
+ * exactly as they do today. */
 function toSanityDoc(id: string, content: SiteContent) {
   return {
     _id: id,
@@ -132,32 +132,18 @@ function toSanityDoc(id: string, content: SiteContent) {
       })),
     ),
     bookIntro: content.bookIntro,
-    leadForm: content.leadForm,
+    leadForm: {
+      ...content.leadForm,
+      // Array items need a _key or the Studio can't render drag handles;
+      // _type has to match the schema's `name` for the question editor.
+      fields: withKeys(
+        content.leadForm.fields.map((f) => ({ _type: "leadFormField", ...f })),
+      ),
+    },
     faqIntro: content.faqIntro,
     faq: withKeys(content.faq),
     cta: content.cta,
     contact: content.contact,
-  };
-}
-
-/** Converts a default CaseStudy into a real, standalone "caseStudy"
- * document — with the landing-page toggle already set, so it shows up
- * on the right teaser section immediately after seeding. */
-function toCaseStudyDoc(cs: CaseStudy, featuredOn: ("homepage" | "newSellerPage")[]) {
-  if (!cs.slug) return null;
-  return {
-    _id: `caseStudy-${cs.slug}`,
-    _type: "caseStudy",
-    title: cs.title,
-    slug: { _type: "slug", current: cs.slug },
-    publishedAt: new Date().toISOString(),
-    featuredOn,
-    tag: cs.tag,
-    excerpt: cs.positioning,
-    positioning: cs.positioning,
-    angle: cs.angle,
-    competition: cs.competition,
-    result: cs.result,
   };
 }
 
@@ -191,23 +177,20 @@ async function seed() {
   const homepage = toSanityDoc("homepage", defaultContent);
   const newSellerPage = toSanityDoc("newSellerPage", newSellerDefaults);
 
-  const caseStudyDocs = [
-    ...defaultContent.caseStudies.map((cs) => toCaseStudyDoc(cs, ["homepage"])),
-    ...newSellerDefaults.caseStudies.map((cs) => toCaseStudyDoc(cs, ["newSellerPage"])),
-  ].filter((d): d is NonNullable<typeof d> => d !== null);
-
-  const [homeResult, newSellerResult, footerResult, ...caseStudyResults] =
-    await Promise.all([
-      client.createIfNotExists(homepage),
-      client.createIfNotExists(newSellerPage),
-      client.createIfNotExists(toFooterDoc()),
-      ...caseStudyDocs.map((doc) => client.createIfNotExists(doc)),
-    ]);
+  // Case studies are deliberately NOT seeded. This script used to create
+  // six placeholder ones from the code defaults; they had no cover image
+  // and no write-up, so they showed on /case-studies as blank cards, and
+  // anyone who ran the seed twice on a fresh dataset got them back. Real
+  // case studies belong to the client — they create them in the Studio.
+  const [homeResult, newSellerResult, footerResult] = await Promise.all([
+    client.createIfNotExists(homepage),
+    client.createIfNotExists(newSellerPage),
+    client.createIfNotExists(toFooterDoc()),
+  ]);
 
   console.log(`✓ Homepage:          ${homeResult._id}`);
   console.log(`✓ New Sellers Page:  ${newSellerResult._id}`);
   console.log(`✓ Footer:            ${footerResult._id}`);
-  caseStudyResults.forEach((r) => console.log(`✓ Case study:        ${r._id}`));
   console.log(
     "\nDone. Anything that already existed was left untouched (createIfNotExists never overwrites).",
   );

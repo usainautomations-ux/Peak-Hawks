@@ -1,4 +1,5 @@
 import { ICON_OPTIONS } from "../../lib/icons";
+import { questionsHelp, ghlFieldHelp, tagsHelp } from "./leadFormHelp";
 
 // sanity/schemas/pageContent.ts
 //
@@ -577,25 +578,120 @@ export const pageContent = {
       group: "leadForm",
       options: { collapsible: false },
       fields: [
-        { name: "nameLabel", title: "\"Name\" field label", type: "string" },
-        { name: "namePlaceholder", title: "\"Name\" field placeholder", type: "string" },
-        { name: "emailLabel", title: "\"Email\" field label", type: "string" },
-        { name: "emailPlaceholder", title: "\"Email\" field placeholder", type: "string" },
+        { name: "nameLabel", title: "\"Name\" field label", type: "string",
+          description: "The label above the box, e.g. \"Name\". Always visible." },
+        { name: "namePlaceholder", title: "\"Name\" field placeholder", type: "string",
+          description: "The faint hint inside the empty box, e.g. \"Your name\". Disappears as they type." },
+        { name: "emailLabel", title: "\"Email\" field label", type: "string",
+          description: "The label above the box, e.g. \"Email\". Always visible." },
+        { name: "emailPlaceholder", title: "\"Email\" field placeholder", type: "string",
+          description: "The faint hint inside the empty box, e.g. \"you@brand.com\". Disappears as they type." },
 
-        { name: "revenueLabel", title: "Revenue dropdown — label", type: "string" },
-        { name: "revenueOptions", title: "Revenue dropdown — choices", type: "array",
-          of: [{ type: "string" }],
-          description: "The first one shown is what's selected by default. Add, remove, or reorder freely." },
+        // ── THE QUESTIONS ──────────────────────────────────────────────
+        {
+          name: "fields",
+          title: "Questions",
+          type: "array",
+          description: questionsHelp,
+          of: [{
+            type: "object",
+            name: "leadFormField",
+            fields: [
+              { name: "label", title: "Question", type: "string",
+                description:
+                  'The small label shown ABOVE the box, and always visible — this is the question itself, e.g. "Monthly Revenue on Amazon".',
+                validation: (R: any) => R.required() },
+              {
+                name: "type",
+                title: "Answer type",
+                type: "string",
+                initialValue: "dropdown",
+                options: {
+                  list: [
+                    { title: "Dropdown — pick one of your choices", value: "dropdown" },
+                    { title: "Short text — one line they type", value: "text" },
+                    { title: "Long text — a paragraph they type", value: "textarea" },
+                    { title: "Phone number", value: "phone" },
+                  ],
+                  layout: "radio",
+                },
+                validation: (R: any) => R.required(),
+              },
+              { name: "options", title: "Dropdown choices", type: "array",
+                of: [{ type: "string" }],
+                hidden: ({ parent }: any) => parent?.type !== "dropdown",
+                description: "The first one is what's selected by default. Add, remove, or reorder freely.",
+                validation: (R: any) =>
+                  R.custom((options: string[] | undefined, ctx: any) =>
+                    ctx.parent?.type === "dropdown" && !options?.length
+                      ? "A dropdown needs at least one choice."
+                      : true,
+                  ) },
+              { name: "placeholder", title: "Placeholder (hint inside the box)", type: "string",
+                hidden: ({ parent }: any) => parent?.type === "dropdown",
+                description:
+                  'Optional faint grey example text INSIDE the empty box, e.g. "+1 555 0100". It disappears as soon as they start typing, so never put anything important here — that belongs in the Question above. Leave blank for no hint. Dropdowns don\'t use this.' },
+              { name: "required", title: "Required?", type: "boolean", initialValue: true,
+                description: "On: the form won't submit until this is answered." },
+              {
+                name: "target",
+                title: "Where does the answer go in GoHighLevel?",
+                type: "string",
+                initialValue: "customField",
+                options: {
+                  list: [
+                    { title: "Into a custom field", value: "customField" },
+                    { title: "Into the contact's phone number", value: "phone" },
+                    { title: "Nowhere — just include it in the contact's note", value: "none" },
+                  ],
+                  layout: "radio",
+                },
+                description:
+                  "Every answer is written onto the contact's timeline as a note no matter what you pick here — so nothing is ever lost, even on \"Nowhere\".",
+              },
+              { name: "ghlField", title: "GoHighLevel custom field key", type: "string",
+                hidden: ({ parent }: any) => parent?.target !== "customField",
+                description: ghlFieldHelp,
+                validation: (R: any) =>
+                  R.custom((key: string | undefined, ctx: any) =>
+                    ctx.parent?.target === "customField" && !key?.trim()
+                      ? "Enter the custom field's key, or change where the answer goes."
+                      : true,
+                  ) },
+              { name: "halfWidth", title: "Half width", type: "boolean", initialValue: false,
+                description: "On: this sits side by side with the next half-width question, like Name and Email do." },
+            ],
+            preview: {
+              select: { title: "label", type: "type", required: "required" },
+              prepare({ title, type, required }: { title?: string; type?: string; required?: boolean }) {
+                const kind = { dropdown: "Dropdown", text: "Short text", textarea: "Long text", phone: "Phone" }[
+                  type ?? "dropdown"
+                ] ?? type;
+                return {
+                  title: title || "Untitled question",
+                  subtitle: `${kind}${required ? "" : " · optional"}`,
+                };
+              },
+            },
+          }],
+        },
 
-        { name: "productsLabel", title: "Products dropdown — label", type: "string" },
-        { name: "productsOptions", title: "Products dropdown — choices", type: "array",
-          of: [{ type: "string" }],
-          description: "The first one shown is what's selected by default." },
-
-        { name: "budgetLabel", title: "Budget dropdown — label", type: "string" },
-        { name: "budgetOptions", title: "Budget dropdown — choices", type: "array",
-          of: [{ type: "string" }],
-          description: "The first one shown is what's selected by default." },
+        // ── LEGACY (pre-"Questions") ───────────────────────────────────
+        // Kept so documents written before the question builder existed
+        // keep working: lib/content/merged.ts rebuilds the three dropdowns
+        // from these when "Questions" above is empty. Hidden rather than
+        // deleted, because deleting them would drop the data on the next
+        // Studio publish. `npm run migrate:sanity` copies them into
+        // "Questions", after which these are dead weight.
+        { name: "revenueLabel", title: "Revenue dropdown — label (legacy)", type: "string", hidden: true },
+        { name: "revenueOptions", title: "Revenue dropdown — choices (legacy)", type: "array",
+          of: [{ type: "string" }], hidden: true },
+        { name: "productsLabel", title: "Products dropdown — label (legacy)", type: "string", hidden: true },
+        { name: "productsOptions", title: "Products dropdown — choices (legacy)", type: "array",
+          of: [{ type: "string" }], hidden: true },
+        { name: "budgetLabel", title: "Budget dropdown — label (legacy)", type: "string", hidden: true },
+        { name: "budgetOptions", title: "Budget dropdown — choices (legacy)", type: "array",
+          of: [{ type: "string" }], hidden: true },
 
         { name: "submitLabel", title: "Submit button text", type: "string",
           description: 'e.g. "Book My Strategy Call"' },
@@ -605,6 +701,15 @@ export const pageContent = {
         { name: "successHeading", title: "Confirmation — heading", type: "string",
           description: 'Shown after a successful submit, replacing the form, e.g. "You\'re in."' },
         { name: "successBody", title: "Confirmation — message", type: "text", rows: 2 },
+
+        // ── WHAT HAPPENS IN GOHIGHLEVEL ────────────────────────────────
+        { name: "tags", title: "Tags added in GoHighLevel", type: "array",
+          of: [{ type: "string" }],
+          description: tagsHelp },
+        { name: "source", title: "Lead source recorded in GoHighLevel", type: "string",
+          description: 'Shows on the contact as its source, e.g. "Website — New Sellers Page". Leave blank for the built-in default.' },
+        { name: "opportunityName", title: "Pipeline deal name", type: "string",
+          description: 'The name of the deal created in your pipeline. Write {{name}} where the person\'s name should go, e.g. "{{name}} — New Seller Call".' },
       ],
     },
 

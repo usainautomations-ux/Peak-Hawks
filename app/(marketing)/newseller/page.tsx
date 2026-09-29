@@ -60,7 +60,7 @@ export default async function NewSellerPage() {
       <Services items={content.services} intro={content.servicesIntro} />
       <Process steps={content.process} intro={content.processIntro} />
       <Testimonials items={content.testimonials} intro={content.testimonialsIntro} />
-      <BookACall intro={content.bookIntro} leadForm={content.leadForm} />
+      <BookACall intro={content.bookIntro} leadForm={content.leadForm} page="newSellerPage" />
       <FAQ items={content.faq} intro={content.faqIntro} />
       <FinalCTA data={content.cta} />
       <Chatbot />

@@ -4,12 +4,16 @@ import {
   getCaseStudyList as getSanityCaseStudyList,
   getAllCaseStudySlugs,
 } from "@/lib/sanity/queries";
-import { defaultCaseStudies, getDefaultCaseStudyBySlug } from "@/lib/content/caseStudyDefaults";
-import type { CaseStudy } from "@/lib/content/defaults";
 
 /**
- * Unified shape both the listing page and the detail page render from,
- * regardless of whether the data came from Sanity or the code defaults.
+ * Unified shape both the listing page and the detail page render from.
+ *
+ * Sanity is the only source of case studies. There is deliberately no
+ * built-in/demo fallback here: placeholder case studies can't be deleted
+ * from the Studio (they don't exist as documents), so they used to sit on
+ * /case-studies as undeletable, image-less cards. Now the site shows
+ * exactly what's in Sanity — nothing more — and every case study can be
+ * created, edited, hidden, unpublished or deleted by the client.
  */
 export type DisplayCaseStudy = {
   slug: string;
@@ -25,57 +29,35 @@ export type DisplayCaseStudy = {
   seo?: { title?: string; description?: string };
 };
 
-function fromDefault(cs: CaseStudy): DisplayCaseStudy {
-  return {
-    slug: cs.slug!,
-    title: cs.title,
-    tag: cs.tag,
-    excerpt: cs.positioning,
-    result: cs.result,
-    coverImage: cs.image,
-    positioning: cs.positioning,
-    angle: cs.angle,
-    competition: cs.competition,
-  };
-}
-
 /**
- * Single case study by slug. Checks Sanity first (a real, client-created
- * case study always wins); falls back to the built-in default content so
- * the site has working case study pages even before Sanity is set up.
+ * Single case study by slug. Returns null — and so 404s — for anything
+ * that isn't a published, non-hidden Sanity case study, including one
+ * whose publish date is still in the future.
  */
 export async function getMergedCaseStudy(slug: string): Promise<DisplayCaseStudy | null> {
   const sanity = await getSanityCaseStudy(slug);
-  if (sanity) {
-    return {
-      slug: sanity.slug,
-      title: sanity.title,
-      tag: sanity.tag,
-      excerpt: sanity.excerpt,
-      result: sanity.result,
-      coverImage: sanity.coverImage,
-      positioning: sanity.positioning,
-      angle: sanity.angle,
-      competition: sanity.competition,
-      body: sanity.body,
-      seo: sanity.seo,
-    };
-  }
-  const def = getDefaultCaseStudyBySlug(slug);
-  return def ? fromDefault(def) : null;
+  if (!sanity) return null;
+
+  return {
+    slug: sanity.slug,
+    title: sanity.title,
+    tag: sanity.tag,
+    excerpt: sanity.excerpt,
+    result: sanity.result,
+    coverImage: sanity.coverImage,
+    positioning: sanity.positioning,
+    angle: sanity.angle,
+    competition: sanity.competition,
+    body: sanity.body,
+    seo: sanity.seo,
+  };
 }
 
-/**
- * Full listing for /case-studies. Real Sanity case studies are always
- * shown; any default case study whose slug isn't already covered by a
- * real Sanity document is included too, so the listing is never empty
- * before the client has published anything.
- */
+/** Full listing for /case-studies — published, visible case studies only. */
 export async function getMergedCaseStudyList(): Promise<DisplayCaseStudy[]> {
   const sanityList = await getSanityCaseStudyList();
-  const sanitySlugs = new Set(sanityList.map((s) => s.slug));
 
-  const sanityItems: DisplayCaseStudy[] = sanityList.map((s) => ({
+  return sanityList.map((s) => ({
     slug: s.slug,
     title: s.title,
     tag: s.tag,
@@ -86,23 +68,14 @@ export async function getMergedCaseStudyList(): Promise<DisplayCaseStudy[]> {
     angle: "",
     competition: "",
   }));
-
-  const defaultItems: DisplayCaseStudy[] = defaultCaseStudies
-    .filter((cs): cs is CaseStudy & { slug: string } => Boolean(cs.slug) && !sanitySlugs.has(cs.slug!))
-    .map(fromDefault);
-
-  return [...sanityItems, ...defaultItems];
 }
 
-/** Every known slug (Sanity + defaults) for generateStaticParams. */
+/** Every visible slug, for generateStaticParams and the sitemap. */
 export async function getAllMergedCaseStudySlugs(): Promise<{ slug: string }[]> {
-  const sanitySlugs = await getAllCaseStudySlugs();
-  const defaultSlugs = defaultCaseStudies
-    .filter((cs): cs is CaseStudy & { slug: string } => Boolean(cs.slug))
-    .map((cs) => ({ slug: cs.slug }));
+  const slugs = await getAllCaseStudySlugs();
 
   const seen = new Set<string>();
-  return [...sanitySlugs, ...defaultSlugs].filter((s) => {
+  return slugs.filter((s) => {
     if (seen.has(s.slug)) return false;
     seen.add(s.slug);
     return true;

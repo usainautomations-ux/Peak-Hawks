@@ -78,21 +78,51 @@ export type BookIntro = {
  * placeholders, each dropdown's option list, the submit button (both its
  * resting and "Sending…" states), and the confirmation shown after a
  * successful submit. */
+export type LeadFormFieldType = "dropdown" | "text" | "textarea" | "phone";
+
+/** Where a question's answer ends up in GoHighLevel. Every answer is also
+ * written to the contact's timeline as a note regardless, so "none" still
+ * reaches the sales team — it just isn't stored in a structured field. */
+export type LeadFormFieldTarget = "customField" | "phone" | "none";
+
+/** One question on the lead form, below the built-in Name and Email.
+ * Entirely client-editable in Sanity → Lead Form → "Questions". */
+export type LeadFormField = {
+  /** Stable identity, used as the submitted answer's key. Sanity array
+   * `_key` for Studio-authored questions; a fixed name for the built-ins. */
+  key: string;
+  label: string;
+  type: LeadFormFieldType;
+  /** Only meaningful for `type: "dropdown"`. The first entry is preselected. */
+  options: string[];
+  placeholder?: string;
+  required: boolean;
+  target: LeadFormFieldTarget;
+  /** The GoHighLevel custom field key, when `target` is "customField". */
+  ghlField?: string;
+  /** Render at half width so it can sit beside the next half-width question. */
+  halfWidth?: boolean;
+};
+
 export type LeadFormContent = {
   nameLabel: string;
   namePlaceholder: string;
   emailLabel: string;
   emailPlaceholder: string;
-  revenueLabel: string;
-  revenueOptions: string[];
-  productsLabel: string;
-  productsOptions: string[];
-  budgetLabel: string;
-  budgetOptions: string[];
+  /** The questions below Name and Email — add, remove and reorder in Sanity. */
+  fields: LeadFormField[];
   submitLabel: string;
   submitLoadingLabel: string;
   successHeading: string;
   successBody: string;
+  /** Tags applied to the GoHighLevel contact on every submission from this
+   * page. Resolved server-side from Sanity, never accepted from the
+   * browser — otherwise anyone could tag themselves into a workflow. */
+  tags: string[];
+  /** The "source" recorded on the GoHighLevel contact. */
+  source: string;
+  /** Pipeline deal name. `{{name}}` is replaced with the submitter's name. */
+  opportunityName: string;
 };
 
 /** The final dark call-to-action band above the footer. */
@@ -489,35 +519,12 @@ export const defaultContent: SiteContent = {
     angleLabel: "Angle",
     competitionLabel: "Competition",
   },
-  caseStudies: [
-    {
-      slug: "first-mover-liquid-drops",
-      tag: "Wellness · Drops Format",
-      title: "First-Mover Liquid Drops",
-      positioning: "Format nobody offered while search demand climbed",
-      angle: "Easier to take, faster absorption vs. capsules",
-      competition: "Zero — first drops format in the niche",
-      result: "$1M+ annual run rate in year one",
-    },
-    {
-      slug: "differentiated-sleep-stack",
-      tag: "Sleep · Gummies",
-      title: "Differentiated Sleep Stack",
-      positioning: "Massive demand, but every listing looked identical",
-      angle: "Added a trending functional ingredient stack",
-      competition: "Low — emerging sub-niche, early entry",
-      result: "$2.8M/yr, two years post-launch",
-    },
-    {
-      slug: "focus-angle-nobody-claimed",
-      tag: "Energy · Powder",
-      title: 'The "Focus" Angle Nobody Claimed',
-      positioning: "20k+ monthly searches for a benefit no packaging owned",
-      angle: "Bold benefit-led packaging and copy",
-      competition: "High, but no one led with the core benefit",
-      result: "$1.5M/yr within 10 months",
-    },
-  ],
+  // Case studies are Sanity-only — there is deliberately no built-in list
+  // here. A hardcoded case study can't be deleted or edited from the
+  // Studio, so it would sit on the site forever as an image-less card.
+  // Create them in Sanity → Case Studies instead; tick "Show on landing
+  // page(s)" on a case study to have it appear in this page's teaser.
+  caseStudies: [],
   servicesIntro: {
     sectionLabel: "Services",
     sectionNumber: 5,
@@ -624,23 +631,49 @@ export const defaultContent: SiteContent = {
     namePlaceholder: "Your name",
     emailLabel: "Email",
     emailPlaceholder: "you@brand.com",
-    revenueLabel: "Monthly Revenue on Amazon",
-    revenueOptions: [
-      "Haven't launched yet",
-      "$0 \u2013 $50k",
-      "$50k \u2013 $250k",
-      "$250k \u2013 $500k",
-      "$500k \u2013 $1M+",
+    fields: [
+      {
+        key: "revenue",
+        label: "Monthly Revenue on Amazon",
+        type: "dropdown",
+        options: [
+          "Haven't launched yet",
+          "$0 \u2013 $50k",
+          "$50k \u2013 $250k",
+          "$250k \u2013 $500k",
+          "$500k \u2013 $1M+",
+        ],
+        required: true,
+        target: "customField",
+        ghlField: "monthly_amazon_revenue",
+      },
+      {
+        key: "products",
+        label: "Products Planned This Quarter",
+        type: "dropdown",
+        options: ["1 product", "2 \u2013 5 products", "5 \u2013 10 products", "10+ products"],
+        required: true,
+        target: "customField",
+        ghlField: "products_planned_quarter",
+      },
+      {
+        key: "budget",
+        label: "Est. Launch Budget per Product",
+        type: "dropdown",
+        options: ["Less than $10k", "$10k \u2013 $30k", "$30k \u2013 $50k", "$50k+"],
+        required: true,
+        target: "customField",
+        ghlField: "launch_budget_per_product",
+      },
     ],
-    productsLabel: "Products Planned This Quarter",
-    productsOptions: ["1 product", "2 \u2013 5 products", "5 \u2013 10 products", "10+ products"],
-    budgetLabel: "Est. Launch Budget per Product",
-    budgetOptions: ["Less than $10k", "$10k \u2013 $30k", "$30k \u2013 $50k", "$50k+"],
     submitLabel: "Book My Strategy Call",
     submitLoadingLabel: "Sending\u2026",
     successHeading: "You're in.",
     successBody:
       "We've got your details \u2014 the launch team will reach out within one business day.",
+    tags: ["website-lead", "strategy-call-request"],
+    source: "Website \u2014 Strategy Call Form",
+    opportunityName: "{{name}} \u2014 Strategy Call",
   },
 
   faqIntro: {
