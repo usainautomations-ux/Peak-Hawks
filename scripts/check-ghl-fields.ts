@@ -198,8 +198,68 @@ async function main() {
   console.log("All good — every question's field exists in GoHighLevel.");
 }
 
+/**
+ * Tells "GoHighLevel said no" apart from "the request never got there".
+ *
+ * Both can surface as a 403, and conflating them sends you hunting for a
+ * token problem that doesn't exist. A proxy, corporate firewall, VPN or
+ * sandbox that blocks the host answers the request itself, with a
+ * plain-text body rather than GoHighLevel's JSON — that is the tell. A
+ * 407 is always the proxy, and a transport-level failure never reaches
+ * GoHighLevel at all.
+ */
+function isNetworkBlock(err: unknown): boolean {
+  if (err instanceof GHLError) {
+    if (err.status === 407) return true;
+    // GoHighLevel answers with JSON; a string body at this layer means
+    // something in between answered instead.
+    if (
+      typeof err.body === "string" &&
+      /allowlist|egress|proxy|blocked|denied|forbidden by/i.test(err.body)
+    ) {
+      return true;
+    }
+    return false;
+  }
+  const text = `${(err as Error)?.message ?? ""} ${String((err as { cause?: unknown })?.cause ?? "")}`;
+  return /fetch failed|ECONNREFUSED|ENOTFOUND|EAI_AGAIN|ETIMEDOUT|CONNECT tunnel|certificate/i.test(
+    text,
+  );
+}
+
 main().catch((err) => {
   const message = String(err?.message ?? err);
+  const proxyBody =
+    err instanceof GHLError && typeof err.body === "string" ? err.body : "";
+
+  if (isNetworkBlock(err)) {
+    console.error(
+      "\n✗ Could not reach GoHighLevel — the request never left this machine.",
+    );
+    if (proxyBody) console.error(`\n  ${proxyBody.trim()}`);
+    console.error(
+      [
+        "",
+        "This is a network problem, NOT a problem with your token. Nothing",
+        "was sent to GoHighLevel, so it has said nothing about your",
+        "credentials either way.",
+        "",
+        "Usually one of:",
+        "",
+        "  · a proxy, VPN or corporate firewall blocking",
+        "    services.leadconnectorhq.com",
+        "  · a sandboxed or CI environment whose egress allowlist does not",
+        "    include that host",
+        "  · no internet connection",
+        "",
+        "Run it from a machine with normal internet access, or allow that",
+        "host, then try again.",
+        "",
+      ].join("\n"),
+    );
+    process.exit(1);
+  }
+
   console.error("\n✗ Check failed:", message);
 
   if (err instanceof GHLError && (err.status === 401 || err.status === 403)) {
