@@ -233,6 +233,23 @@ recorded on the contact, and the **pipeline deal name** — separately for
 each page, so homepage and New Sellers leads can trigger different
 workflows.
 
+**Check they all line up:**
+
+```bash
+npm run check:ghl-fields
+```
+
+Reads the questions exactly as the site does (Sanity first, code
+defaults for anything unset), asks GoHighLevel which custom fields
+exist, and prints which keys are missing — plus which existing fields no
+question writes to, since a near-miss there is usually the explanation.
+Exits non-zero when something is missing, so it can gate a deploy.
+
+Uses the same `GHL_PRIVATE_TOKEN` / `GHL_LOCATION_ID` the site runs on;
+the token needs the `locations.readonly` scope to read the field list. If
+it can't reach Sanity it says so loudly rather than quietly reporting on
+the code defaults as though they were your live questions.
+
 ### 2.4 Custom Values = the CMS
 
 `Settings → Custom Values` — this is where the client edits the site,
