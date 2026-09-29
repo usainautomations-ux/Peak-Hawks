@@ -1,12 +1,13 @@
 <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
   <rect width="48" height="48" rx="10" fill="#15171A"/>
-  <g transform="translate(2.5,3)">
-    <path d="M7 9 L23 14.5 L27.5 19 L14.5 17 Z" fill="#6A6A6E"/>
-    <path d="M9 22 L24.5 21 L27.5 24 L13.5 27.5 Z" fill="#828287"/>
-    <path d="M13.5 32 L26.5 27 L28.5 30 L18.5 37.5 Z" fill="#9A9A9F"/>
-    <path d="M22.5 39 L28.5 32 L30.5 34 L26.5 42 Z" fill="#B4B4B8"/>
-    <path d="M31.5 33 L30.5 27 L33.5 28 L34.5 34 Z" fill="#CFCFD2"/>
-    <path d="M27.5 14 L34.5 12 L38.5 15 L33.5 19 L28.5 18 Z" fill="#F97316"/>
-    <path d="M34.5 12 L41.5 14 L37.5 16 Z" fill="#EA5C00"/>
+  <g transform="translate(0.5,-1)">
+    <path d="M6 8 L22 14 L27 19 L14 17 Z" fill="#5F5F5F"/>
+    <path d="M8 22 L24 21 L27 24 L13 27 Z" fill="#7A7A7E"/>
+    <path d="M13 32 L26 27 L28 30 L18 37 Z" fill="#8B8B90"/>
+    <path d="M22 39 L28 32 L30 34 L26 42 Z" fill="#A9A9AD"/>
+    <path d="M31 33 L30 27 L33 28 L34 34 Z" fill="#C6C6C9"/>
+    <path d="M36 30 L33 25 L37 25 L39 29 Z" fill="#DBDBDD"/>
+    <path d="M27 14 L34 12 L38 15 L33 19 L28 18 Z" fill="#F97316"/>
+    <path d="M34 12 L41 14 L37 16 Z" fill="#EA5C00"/>
   </g>
 </svg>
