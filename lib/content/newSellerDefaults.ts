@@ -318,10 +318,27 @@ export const newSellerDefaults: SiteContent = {
     namePlaceholder: "Your name",
     emailLabel: "Email",
     emailPlaceholder: "you@brand.com",
-    // Same questions and tags as the homepage by default, because that's
-    // exactly what this page sends today. The two pages can now diverge
-    // freely \u2014 that's done in Sanity \u2192 Lead Form, not here.
     fields: [
+      {
+        // This page's opening qualifier, and the counterpart to the
+        // homepage's "Product Currently Advertised" — someone who hasn't
+        // launched has nothing advertised, so asking that here would draw a
+        // blank. Deliberately its own GHL field rather than sharing the
+        // homepage's: a field holding product names for one audience and
+        // stage labels for the other can't be filtered or reported on.
+        key: "amazonStage",
+        label: "Where Are You in Your Amazon Journey?",
+        type: "dropdown",
+        options: [
+          "Just researching",
+          "Product picked, not ordered",
+          "Stock ordered, not launched",
+          "Launched, under $10k/month",
+        ],
+        required: true,
+        target: "customField",
+        ghlField: "amazon_stage",
+      },
       {
         key: "revenue",
         label: "Monthly Revenue on Amazon",
@@ -361,7 +378,13 @@ export const newSellerDefaults: SiteContent = {
     successHeading: "You're in.",
     successBody:
       "We've got your details \u2014 the launch team will reach out within one business day.",
-    tags: ["website-lead", "strategy-call-request"],
+    // The first two are unchanged, so existing GHL workflows keep firing.
+    // "new-seller" is what tells this audience apart from the homepage's.
+    tags: ["website-lead", "strategy-call-request", "new-seller"],
+    // Left as-is on purpose: tags are additive, so adding "new-seller"
+    // can't break an existing workflow, but source is a single value —
+    // changing it would stop any workflow filtering on the old string from
+    // matching. Change it in the Studio once you've checked nothing does.
     source: "Website \u2014 Strategy Call Form",
     opportunityName: "{{name}} \u2014 Strategy Call",
   },

@@ -648,6 +648,23 @@ export const defaultContent: SiteContent = {
         ghlField: "monthly_amazon_revenue",
       },
       {
+        // Asked only on the homepage: an established seller has something
+        // running, a pre-launch visitor does not. The New Sellers page asks
+        // the stage question below instead, into its own GHL field — one
+        // field holding both product names and stage labels would be
+        // unfilterable.
+        key: "productAdvertised",
+        label: "Product Currently Advertised",
+        type: "text",
+        options: [],
+        placeholder: "e.g. magnesium glycinate gummies",
+        // Optional on purpose: a required free-text box costs conversions
+        // and collects junk. Flip "Required?" in the Studio to change it.
+        required: false,
+        target: "customField",
+        ghlField: "product_currently_advertised",
+      },
+      {
         key: "products",
         label: "Products Planned This Quarter",
         type: "dropdown",
@@ -671,7 +688,10 @@ export const defaultContent: SiteContent = {
     successHeading: "You're in.",
     successBody:
       "We've got your details \u2014 the launch team will reach out within one business day.",
-    tags: ["website-lead", "strategy-call-request"],
+    // The first two are what GHL workflows have always triggered off, so
+    // they stay. "established-seller" is the segmentation handle — tags,
+    // not separate fields, are how the two audiences are told apart.
+    tags: ["website-lead", "strategy-call-request", "established-seller"],
     source: "Website \u2014 Strategy Call Form",
     opportunityName: "{{name}} \u2014 Strategy Call",
   },
