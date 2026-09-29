@@ -120,22 +120,7 @@ export type SanityPageContent = {
     steps?: string[];
     formEmbedUrl?: string;
   };
-  leadForm?: {
-    nameLabel?: string;
-    namePlaceholder?: string;
-    emailLabel?: string;
-    emailPlaceholder?: string;
-    revenueLabel?: string;
-    revenueOptions?: string[];
-    productsLabel?: string;
-    productsOptions?: string[];
-    budgetLabel?: string;
-    budgetOptions?: string[];
-    submitLabel?: string;
-    submitLoadingLabel?: string;
-    successHeading?: string;
-    successBody?: string;
-  };
+  leadForm?: SanityLeadForm;
   faqIntro?: SanitySectionIntro;
   faq?: Array<{ q: string; a: string }>;
   cta?: {
@@ -167,6 +152,45 @@ export type SanityFooterContent = {
   legalLabels?: { terms?: string; privacy?: string; disclaimer?: string };
   mobileCtaLabel?: string;
   chatWidgetId?: string;
+};
+
+/** One question from Sanity → Lead Form → "Questions". Every field is
+ * optional because a half-filled row in the Studio is a normal, expected
+ * state — lib/content/merged.ts is what turns this into something the
+ * form can render. */
+export type SanityLeadFormField = {
+  /** The array item's `_key`, projected as `key` — stable across edits. */
+  key?: string;
+  label?: string;
+  type?: string;
+  options?: string[];
+  placeholder?: string;
+  required?: boolean;
+  target?: string;
+  ghlField?: string;
+  halfWidth?: boolean;
+};
+
+export type SanityLeadForm = {
+  nameLabel?: string;
+  namePlaceholder?: string;
+  emailLabel?: string;
+  emailPlaceholder?: string;
+  fields?: SanityLeadFormField[];
+  submitLabel?: string;
+  submitLoadingLabel?: string;
+  successHeading?: string;
+  successBody?: string;
+  tags?: string[];
+  source?: string;
+  opportunityName?: string;
+  /** Pre-"Questions" shape — see the legacy note in the schema. */
+  revenueLabel?: string;
+  revenueOptions?: string[];
+  productsLabel?: string;
+  productsOptions?: string[];
+  budgetLabel?: string;
+  budgetOptions?: string[];
 };
 
 export type SanityCaseStudyListItem = {

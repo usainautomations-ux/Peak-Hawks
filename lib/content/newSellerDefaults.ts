@@ -206,35 +206,12 @@ export const newSellerDefaults: SiteContent = {
     angleLabel: "Angle",
     competitionLabel: "Competition",
   },
-  caseStudies: [
-    {
-      slug: "spreadsheet-to-first-sale",
-      tag: "First Launch · Supplements",
-      title: "From Spreadsheet to First Sale in 11 Weeks",
-      positioning: "Had zero Amazon experience and $10k saved to invest",
-      angle: "Validated a low-competition sub-niche before ordering stock",
-      competition: "Moderate — but no one owned the specific angle",
-      result: "Profitable by month 3, reinvesting into product #2",
-    },
-    {
-      slug: "avoided-a-10k-mistake",
-      tag: "First Launch · Home Goods",
-      title: "Avoided a $10k Mistake",
-      positioning: "Original product idea failed our validation checks",
-      angle: "Redirected to a related product with real demand data behind it",
-      competition: "Low — an adjacent niche competitors had missed",
-      result: "Launched profitably on the second idea, not the first",
-    },
-    {
-      slug: "real-budget-no-surprises",
-      tag: "First Launch · Pet Care",
-      title: "A Real Budget, No Surprises",
-      positioning: "Wanted to start small without overspending on ads",
-      angle: "Structured PPC plan matched to a conservative budget",
-      competition: "High, but a tightly targeted long-tail approach worked",
-      result: "Broke even by week 6, scaled spend from there",
-    },
-  ],
+  // Case studies are Sanity-only — there is deliberately no built-in list
+  // here. A hardcoded case study can't be deleted or edited from the
+  // Studio, so it would sit on the site forever as an image-less card.
+  // Create them in Sanity → Case Studies instead; tick "Show on landing
+  // page(s)" on a case study to have it appear in this page's teaser.
+  caseStudies: [],
   servicesIntro: {
     sectionLabel: "Services",
     sectionNumber: 5,
@@ -341,23 +318,52 @@ export const newSellerDefaults: SiteContent = {
     namePlaceholder: "Your name",
     emailLabel: "Email",
     emailPlaceholder: "you@brand.com",
-    revenueLabel: "Monthly Revenue on Amazon",
-    revenueOptions: [
-      "Haven't launched yet",
-      "$0 \u2013 $50k",
-      "$50k \u2013 $250k",
-      "$250k \u2013 $500k",
-      "$500k \u2013 $1M+",
+    // Same questions and tags as the homepage by default, because that's
+    // exactly what this page sends today. The two pages can now diverge
+    // freely \u2014 that's done in Sanity \u2192 Lead Form, not here.
+    fields: [
+      {
+        key: "revenue",
+        label: "Monthly Revenue on Amazon",
+        type: "dropdown",
+        options: [
+          "Haven't launched yet",
+          "$0 \u2013 $50k",
+          "$50k \u2013 $250k",
+          "$250k \u2013 $500k",
+          "$500k \u2013 $1M+",
+        ],
+        required: true,
+        target: "customField",
+        ghlField: "monthly_amazon_revenue",
+      },
+      {
+        key: "products",
+        label: "Products Planned This Quarter",
+        type: "dropdown",
+        options: ["1 product", "2 \u2013 5 products", "5 \u2013 10 products", "10+ products"],
+        required: true,
+        target: "customField",
+        ghlField: "products_planned_quarter",
+      },
+      {
+        key: "budget",
+        label: "Est. Launch Budget per Product",
+        type: "dropdown",
+        options: ["Less than $10k", "$10k \u2013 $30k", "$30k \u2013 $50k", "$50k+"],
+        required: true,
+        target: "customField",
+        ghlField: "launch_budget_per_product",
+      },
     ],
-    productsLabel: "Products Planned This Quarter",
-    productsOptions: ["1 product", "2 \u2013 5 products", "5 \u2013 10 products", "10+ products"],
-    budgetLabel: "Est. Launch Budget per Product",
-    budgetOptions: ["Less than $10k", "$10k \u2013 $30k", "$30k \u2013 $50k", "$50k+"],
     submitLabel: "Book My Strategy Call",
     submitLoadingLabel: "Sending\u2026",
     successHeading: "You're in.",
     successBody:
       "We've got your details \u2014 the launch team will reach out within one business day.",
+    tags: ["website-lead", "strategy-call-request"],
+    source: "Website \u2014 Strategy Call Form",
+    opportunityName: "{{name}} \u2014 Strategy Call",
   },
 
   faqIntro: {

@@ -1,5 +1,5 @@
 import type { BookIntro, LeadFormContent } from "@/lib/content/defaults";
-import { LeadForm } from "@/components/LeadForm";
+import { LeadForm, type LeadFormPage } from "@/components/LeadForm";
 import { GhlFormEmbed } from "@/components/GhlFormEmbed";
 import { BookingWidget } from "@/components/BookingWidget";
 import { Accent } from "@/components/ui/Accent";
@@ -12,10 +12,15 @@ import { SecMeta } from "@/components/SecMeta";
  * heading, paragraph and the numbered checklist are all editable in
  * Sanity → "Book A Call". The checklist numbers itself, so steps can be
  * added or removed freely.
+ *
+ * The form itself — which questions it asks, where each answer lands in
+ * GoHighLevel and which tags a submission applies — is editable per page
+ * in Sanity → "Lead Form".
  */
 export function BookACall({
   intro,
   leadForm,
+  page = "homepage",
   hideMeta = false,
 }: {
   intro: BookIntro;
@@ -23,6 +28,11 @@ export function BookACall({
    * dropdown choices, submit button, confirmation message. Editable in
    * Sanity → "Lead Form", right next to this section's own tab. */
   leadForm: LeadFormContent;
+  /** Which page's lead form this is. The submission is resolved against
+   * this page's Sanity config server-side — its questions, its GHL tags,
+   * its pipeline deal name — so it has to travel with the form. The Case
+   * Studies page reuses the Homepage's form, hence the default. */
+  page?: LeadFormPage;
   /** Hides the "SEC.0X // Contact — ALT ... FT" strip above the heading.
    * Used on the Case Studies page — see the matching note in
    * Testimonials.tsx for why. */
@@ -62,7 +72,7 @@ export function BookACall({
           {intro.formEmbedUrl ? (
             <GhlFormEmbed url={intro.formEmbedUrl} title={intro.heading} />
           ) : (
-            <LeadForm content={leadForm} />
+            <LeadForm content={leadForm} page={page} />
           )}
         </Reveal>
 

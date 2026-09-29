@@ -24,6 +24,8 @@ export const caseStudy = {
       title: "Publish date",
       type: "datetime",
       initialValue: () => new Date().toISOString(),
+      description:
+        "Newest first is the order case studies are listed in. A date in the future keeps the case study off the site until that moment arrives \u2014 handy for lining one up in advance.",
     },
     {
       name: "featuredOn",
@@ -39,6 +41,15 @@ export const caseStudy = {
       },
       description:
         "Every case study always has its own page at /case-studies/[slug] regardless of this setting. Toggle these on to also feature it in the case-studies teaser near the top of a landing page. Leave both off to keep it listed only on /case-studies.",
+    },
+    {
+      name: "hidden",
+      title: "Hide from the website",
+      type: "boolean",
+      initialValue: false,
+      description:
+        "Turn this on to take the case study off the site immediately \u2014 it disappears from /case-studies, from both landing-page teasers and from its own page, but nothing is lost and you can switch it back on at any time. " +
+        "To remove a case study permanently instead, open it and use the \u22ee menu at the bottom of the form \u2192 Delete.",
     },
     {
       name: "tag",
@@ -145,6 +156,15 @@ export const caseStudy = {
   ],
 
   preview: {
-    select: { title: "title", subtitle: "tag", media: "coverImage" },
+    select: { title: "title", tag: "tag", media: "coverImage", hidden: "hidden" },
+    prepare({ title, tag, media, hidden }: { title?: string; tag?: string; media?: any; hidden?: boolean }) {
+      return {
+        title: title || "Untitled case study",
+        // Without this, a hidden case study looks identical to a live one
+        // in the list — the only clue would be opening it.
+        subtitle: hidden ? `\u26D4 Hidden from the website${tag ? ` \u00B7 ${tag}` : ""}` : tag,
+        media,
+      };
+    },
   },
 };

@@ -2,24 +2,41 @@
 
 import { useState } from "react";
 import { Dropdown } from "@/components/ui/Dropdown";
-import type { LeadFormContent } from "@/lib/content/defaults";
+import type { LeadFormContent, LeadFormField } from "@/lib/content/defaults";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function LeadForm({ content }: { content: LeadFormContent }) {
+/** Which page's form this is. The server re-reads that page's Sanity
+ * config to decide what a submission does in GoHighLevel, so this is the
+ * only thing about the form's behaviour the browser gets to choose — and
+ * it's a closed set of two. */
+export type LeadFormPage = "homepage" | "newSellerPage";
+
+/** A dropdown starts on its first choice, everything else starts empty. */
+function initialAnswers(fields: LeadFormField[]): Record<string, string> {
+  return Object.fromEntries(
+    fields.map((f) => [f.key, f.type === "dropdown" ? (f.options[0] ?? "") : ""]),
+  );
+}
+
+export function LeadForm({
+  content,
+  page = "homepage",
+}: {
+  content: LeadFormContent;
+  page?: LeadFormPage;
+}) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    revenue: content.revenueOptions[0] ?? "",
-    products: content.productsOptions[0] ?? "",
-    budget: content.budgetOptions[0] ?? "",
-    website: "", // honeypot
-  });
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot
+  const [answers, setAnswers] = useState<Record<string, string>>(() =>
+    initialAnswers(content.fields),
+  );
 
-  const set = (k: keyof typeof form) => (v: string) =>
-    setForm((f) => ({ ...f, [k]: v }));
+  const setAnswer = (key: string) => (v: string) =>
+    setAnswers((a) => ({ ...a, [key]: v }));
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -32,7 +49,7 @@ export function LeadForm({ content }: { content: LeadFormContent }) {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ page, name, email, answers, website }),
       });
       const data = await res.json();
 
@@ -67,8 +84,8 @@ export function LeadForm({ content }: { content: LeadFormContent }) {
           <input
             type="text"
             required
-            value={form.name}
-            onChange={(e) => set("name")(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder={content.namePlaceholder}
             className={inputCls}
           />
@@ -77,23 +94,53 @@ export function LeadForm({ content }: { content: LeadFormContent }) {
           <input
             type="email"
             required
-            value={form.email}
-            onChange={(e) => set("email")(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder={content.emailPlaceholder}
             className={inputCls}
           />
         </Field>
       </div>
 
-      <Field label={content.revenueLabel}>
-        <Dropdown options={content.revenueOptions} value={form.revenue} onChange={set("revenue")} />
-      </Field>
-      <Field label={content.productsLabel}>
-        <Dropdown options={content.productsOptions} value={form.products} onChange={set("products")} />
-      </Field>
-      <Field label={content.budgetLabel}>
-        <Dropdown options={content.budgetOptions} value={form.budget} onChange={set("budget")} />
-      </Field>
+      {/* Everything below Name and Email is configured in Sanity →
+          Lead Form → Questions, per page. Half-width questions flow into
+          the same two-column grid Name and Email use. */}
+      <div className="grid gap-x-4 sm:grid-cols-2">
+        {content.fields.map((field) => (
+          <Field
+            key={field.key}
+            label={field.label}
+            optional={!field.required}
+            className={field.halfWidth ? "sm:col-span-1" : "sm:col-span-2"}
+          >
+            {field.type === "dropdown" ? (
+              <Dropdown
+                options={field.options}
+                value={answers[field.key] ?? field.options[0] ?? ""}
+                onChange={setAnswer(field.key)}
+              />
+            ) : field.type === "textarea" ? (
+              <textarea
+                rows={3}
+                required={field.required}
+                value={answers[field.key] ?? ""}
+                onChange={(e) => setAnswer(field.key)(e.target.value)}
+                placeholder={field.placeholder}
+                className={`${inputCls} resize-y`}
+              />
+            ) : (
+              <input
+                type={field.type === "phone" ? "tel" : "text"}
+                required={field.required}
+                value={answers[field.key] ?? ""}
+                onChange={(e) => setAnswer(field.key)(e.target.value)}
+                placeholder={field.placeholder}
+                className={inputCls}
+              />
+            )}
+          </Field>
+        ))}
+      </div>
 
       {/* honeypot — visually hidden, bots fill it */}
       <input
@@ -102,8 +149,8 @@ export function LeadForm({ content }: { content: LeadFormContent }) {
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"
-        value={form.website}
-        onChange={(e) => set("website")(e.target.value)}
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
         className="absolute left-[-9999px] h-0 w-0 opacity-0"
       />
 
@@ -131,14 +178,19 @@ const inputCls =
 function Field({
   label,
   children,
+  optional = false,
+  className = "",
 }: {
   label: string;
   children: React.ReactNode;
+  optional?: boolean;
+  className?: string;
 }) {
   return (
-    <div className="mb-4">
+    <div className={`mb-4 ${className}`}>
       <label className="mb-2 block font-mono text-[.64rem] uppercase tracking-[.14em] text-grey">
         {label}
+        {optional && <span className="ml-1.5 normal-case tracking-normal opacity-60">(optional)</span>}
       </label>
       {children}
     </div>

@@ -5,7 +5,57 @@ CRM, pipeline, calendar bookings and editable site content all live in GHL.
 
 ## 0. Changelog — parity & tooling fixes
 
-**Latest — critical Sanity crash fix + content model simplified:**
+**Latest — case studies are Sanity-only, lead form is client-built:**
+
+*Case studies*
+- `/case-studies` used to list six hardcoded demo case studies alongside
+  the real ones. They had no cover image or write-up, so they rendered as
+  blank placeholder cards — and because they lived in code, not Sanity,
+  there was no way to delete them from the Studio. They're gone: the site
+  now shows exactly what's in Sanity, on the listing page, on both
+  landing-page teasers and in the sitemap. A page with no case studies
+  shows an empty state, and the landing-page teaser hides itself.
+- `scripts/seed-sanity.ts` no longer creates those six as real documents
+  either — running the seed on a fresh dataset used to put them back.
+- Every case study query now shares one visibility filter: published (not
+  a draft), not hidden, has a title and slug, and its publish date has
+  arrived. A future-dated case study stays off the site until then.
+- New **"Hide from the website"** switch on each case study — an instant,
+  reversible way to pull one down without deleting it. Permanent delete is
+  where it always was: open the case study → ⋮ menu at the foot of the
+  form → Delete. Hidden case studies are marked in the Studio's list.
+
+*Lead form*
+- The form's questions are now **built in Sanity, per page** (→ Lead Form
+  → Questions). Add, remove and reorder freely; each question can be a
+  dropdown, short text, long text or a phone number, be required or
+  optional, sit full or half width, and write to whichever GoHighLevel
+  custom field you name. Name and Email stay built in (GHL needs them to
+  identify the contact), with their labels editable as before.
+- **GHL tags, lead source and the pipeline deal name are editable per
+  page too** — so homepage leads and New Sellers leads can land in
+  different workflows. The deal name takes `{{name}}`.
+- Tags and field keys are resolved **server-side from Sanity** on every
+  submission (`getMergedLeadForm`). The browser only ever sends answers —
+  otherwise a crafted request could tag itself into any GHL workflow.
+  Dropdown answers are checked against their configured choices for the
+  same reason.
+- Every answer is also written to the contact's timeline as a note, so a
+  custom field key that doesn't match anything in GHL costs readability,
+  not the answer.
+- Defaults are unchanged on both pages (same three dropdowns, same tags,
+  same source), so nothing in GoHighLevel changes until you edit it in
+  the Studio.
+- Bug fix: a filled honeypot returned a 400 instead of a silent fake
+  success — `website: z.string().max(0)` rejected the request at schema
+  validation, making the "pretend success" branch unreachable and telling
+  bots they'd been spotted.
+- Existing Studio content is carried over by `npm run migrate:sanity`,
+  which copies the old fixed dropdowns into the new Questions list. The
+  site renders the old shape correctly either way — the migration is so
+  the Studio's Questions list isn't empty.
+
+**Previously — critical Sanity crash fix + content model simplified:**
 - `lib/sanity/client.ts` used to call `createClient()` at module load time,
   which throws synchronously if `projectId` is unset — crashing the entire
   page render, not just the Sanity fetch. Now guarded behind
@@ -118,13 +168,26 @@ Copy the token → `GHL_PRIVATE_TOKEN`.
 Pipeline vars are optional — leave blank and leads still land as contacts,
 just without an auto-created deal.
 
-### 2.3 Custom fields (for the form dropdowns)
+### 2.3 Custom fields (for the form's questions)
 
-`Settings → Custom Fields` — create three **text** fields with these exact keys:
+`Settings → Custom Fields` — create a **text** field for each question the
+form asks beyond name and email. Out of the box that's three:
 
 - `monthly_amazon_revenue`
 - `products_planned_quarter`
 - `launch_budget_per_product`
+
+Which questions exist, and which custom field key each one writes to, is
+set per page in the Studio (`/studio` → Homepage or New Sellers Page →
+Lead Form → Questions). Add a question there, create a matching field
+here, and paste the key in — they have to match exactly. If a key doesn't
+match anything in GHL the lead is still captured and the answer still
+lands on the contact's timeline note; it just won't fill a field.
+
+The same tab sets the **tags** a submission applies, the **lead source**
+recorded on the contact, and the **pipeline deal name** — separately for
+each page, so homepage and New Sellers leads can trigger different
+workflows.
 
 ### 2.4 Custom Values = the CMS
 

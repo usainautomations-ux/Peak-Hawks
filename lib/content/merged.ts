@@ -2,10 +2,24 @@ import {
   getPageContent as getSanityHomepage,
   getNewSellerPageContent as getSanityNewSeller,
   getFeaturedCaseStudies,
+  getLeadForm,
 } from "@/lib/sanity/queries";
 import { getFooterContent as getSanityFooter } from "@/lib/sanity/queries";
-import type { SanityPageContent, SanitySectionIntro } from "@/lib/sanity/types";
-import type { BrandLogo, SectionIntro, SiteContent } from "@/lib/content/defaults";
+import type {
+  SanityPageContent,
+  SanitySectionIntro,
+  SanityLeadForm,
+  SanityLeadFormField,
+} from "@/lib/sanity/types";
+import type {
+  BrandLogo,
+  LeadFormContent,
+  LeadFormField,
+  LeadFormFieldTarget,
+  LeadFormFieldType,
+  SectionIntro,
+  SiteContent,
+} from "@/lib/content/defaults";
 import { defaultContent } from "@/lib/content/defaults";
 import { newSellerDefaults } from "@/lib/content/newSellerDefaults";
 import type { FooterContent } from "@/lib/content/footerDefaults";
@@ -81,6 +95,121 @@ function normaliseBrandLogos(
  * fetched separately here (getFeaturedCaseStudies) and merged in after
  * the rest of the page content.
  */
+
+const FIELD_TYPES: LeadFormFieldType[] = ["dropdown", "text", "textarea", "phone"];
+const FIELD_TARGETS: LeadFormFieldTarget[] = ["customField", "phone", "none"];
+
+/**
+ * Turns one Studio row into something the form can actually render.
+ * Returns null for a row that isn't usable yet — an unlabelled question,
+ * or a dropdown with no choices — because a half-filled row is a normal
+ * state while someone is still typing in the Studio, and it should never
+ * put a broken field on the live page.
+ */
+function toLeadFormField(raw: SanityLeadFormField, index: number): LeadFormField | null {
+  const label = raw.label?.trim();
+  if (!label) return null;
+
+  const type: LeadFormFieldType = FIELD_TYPES.includes(raw.type as LeadFormFieldType)
+    ? (raw.type as LeadFormFieldType)
+    : "text";
+
+  const options = (raw.options ?? []).map((o) => o?.trim()).filter((o): o is string => Boolean(o));
+  if (type === "dropdown" && !options.length) return null;
+
+  const target: LeadFormFieldTarget = FIELD_TARGETS.includes(raw.target as LeadFormFieldTarget)
+    ? (raw.target as LeadFormFieldTarget)
+    : "none";
+
+  const ghlField = raw.ghlField?.trim();
+
+  return {
+    // `_key` is what the browser sends back, so it has to exist. The index
+    // fallback only matters for a document written before the projection
+    // started including it.
+    key: raw.key?.trim() || `field-${index}`,
+    label,
+    type,
+    options,
+    placeholder: raw.placeholder?.trim() || undefined,
+    required: raw.required !== false,
+    // A custom field with no key set can't be written anywhere, so treat it
+    // as note-only rather than sending GHL a nameless field.
+    target: target === "customField" && !ghlField ? "none" : target,
+    ghlField: ghlField || undefined,
+    halfWidth: raw.halfWidth === true,
+  };
+}
+
+/**
+ * Rebuilds the three original dropdowns from the pre-"Questions" fields.
+ * Only reached when a page document predates the question builder and
+ * hasn't been through `npm run migrate:sanity` yet — without this, a
+ * client who had customised those dropdowns would silently get the code
+ * defaults back the moment this shipped.
+ */
+function legacyLeadFormFields(
+  sanity: SanityLeadForm,
+  base: LeadFormContent,
+): LeadFormField[] | null {
+  const legacy: Array<[string, string | undefined, string[] | undefined, string]> = [
+    ["revenue", sanity.revenueLabel, sanity.revenueOptions, "monthly_amazon_revenue"],
+    ["products", sanity.productsLabel, sanity.productsOptions, "products_planned_quarter"],
+    ["budget", sanity.budgetLabel, sanity.budgetOptions, "launch_budget_per_product"],
+  ];
+
+  if (!legacy.some(([, label, options]) => label?.trim() || options?.length)) return null;
+
+  return legacy.map(([key, label, options, ghlField]) => {
+    const fallback = base.fields.find((f) => f.key === key);
+    return {
+      key,
+      label: label?.trim() || fallback?.label || key,
+      type: "dropdown" as const,
+      options: options?.length ? options : (fallback?.options ?? []),
+      required: true,
+      target: "customField" as const,
+      ghlField,
+    };
+  });
+}
+
+/**
+ * Lead form content, Sanity over defaults. Also the single place that
+ * decides which questions the form asks and what a submission does in
+ * GoHighLevel — /api/leads calls this too (via getMergedLeadForm) rather
+ * than trusting anything the browser sends.
+ */
+function resolveLeadForm(base: LeadFormContent, sanity?: SanityLeadForm): LeadFormContent {
+  if (!sanity) return base;
+
+  const authored = (sanity.fields ?? [])
+    .map(toLeadFormField)
+    .filter((f): f is LeadFormField => f !== null);
+
+  const fields = authored.length
+    ? authored
+    : (legacyLeadFormFields(sanity, base) ?? base.fields);
+
+  const tags = (sanity.tags ?? [])
+    .map((t) => t?.trim())
+    .filter((t): t is string => Boolean(t));
+
+  return {
+    nameLabel: sanity.nameLabel?.trim() || base.nameLabel,
+    namePlaceholder: sanity.namePlaceholder?.trim() || base.namePlaceholder,
+    emailLabel: sanity.emailLabel?.trim() || base.emailLabel,
+    emailPlaceholder: sanity.emailPlaceholder?.trim() || base.emailPlaceholder,
+    fields,
+    submitLabel: sanity.submitLabel?.trim() || base.submitLabel,
+    submitLoadingLabel: sanity.submitLoadingLabel?.trim() || base.submitLoadingLabel,
+    successHeading: sanity.successHeading?.trim() || base.successHeading,
+    successBody: sanity.successBody?.trim() || base.successBody,
+    tags: tags.length ? tags : base.tags,
+    source: sanity.source?.trim() || base.source,
+    opportunityName: sanity.opportunityName?.trim() || base.opportunityName,
+  };
+}
 
 /**
  * Overlays a Sanity document onto a base SiteContent object, field by
@@ -190,7 +319,7 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
         sanity.caseStudiesIntro?.competitionLabel?.trim() ||
         base.caseStudiesIntro.competitionLabel,
     },
-    caseStudies: base.caseStudies, // placeholder — overwritten by the caller with featured case studies
+    caseStudies: [], // overwritten by the caller with the page's featured case studies
     servicesIntro: overlayIntro(base.servicesIntro, sanity.servicesIntro),
     services: sanity.services?.length ? sanity.services : base.services,
     processIntro: overlayIntro(base.processIntro, sanity.processIntro),
@@ -216,32 +345,7 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
       steps: sanity.bookIntro?.steps?.length ? sanity.bookIntro.steps : base.bookIntro.steps,
       formEmbedUrl: sanity.bookIntro?.formEmbedUrl ?? base.bookIntro.formEmbedUrl,
     },
-    leadForm: {
-      nameLabel: sanity.leadForm?.nameLabel?.trim() || base.leadForm.nameLabel,
-      namePlaceholder:
-        sanity.leadForm?.namePlaceholder?.trim() || base.leadForm.namePlaceholder,
-      emailLabel: sanity.leadForm?.emailLabel?.trim() || base.leadForm.emailLabel,
-      emailPlaceholder:
-        sanity.leadForm?.emailPlaceholder?.trim() || base.leadForm.emailPlaceholder,
-      revenueLabel: sanity.leadForm?.revenueLabel?.trim() || base.leadForm.revenueLabel,
-      revenueOptions: sanity.leadForm?.revenueOptions?.length
-        ? sanity.leadForm.revenueOptions
-        : base.leadForm.revenueOptions,
-      productsLabel: sanity.leadForm?.productsLabel?.trim() || base.leadForm.productsLabel,
-      productsOptions: sanity.leadForm?.productsOptions?.length
-        ? sanity.leadForm.productsOptions
-        : base.leadForm.productsOptions,
-      budgetLabel: sanity.leadForm?.budgetLabel?.trim() || base.leadForm.budgetLabel,
-      budgetOptions: sanity.leadForm?.budgetOptions?.length
-        ? sanity.leadForm.budgetOptions
-        : base.leadForm.budgetOptions,
-      submitLabel: sanity.leadForm?.submitLabel?.trim() || base.leadForm.submitLabel,
-      submitLoadingLabel:
-        sanity.leadForm?.submitLoadingLabel?.trim() || base.leadForm.submitLoadingLabel,
-      successHeading:
-        sanity.leadForm?.successHeading?.trim() || base.leadForm.successHeading,
-      successBody: sanity.leadForm?.successBody?.trim() || base.leadForm.successBody,
-    },
+    leadForm: resolveLeadForm(base.leadForm, sanity.leadForm),
     faqIntro: overlayIntro(base.faqIntro, sanity.faqIntro),
     faq: sanity.faq?.length ? sanity.faq : base.faq,
     cta: {
@@ -261,8 +365,8 @@ function overlaySanity(base: SiteContent, sanity: SanityPageContent | null): Sit
  *   1. Sanity "Homepage" document (client edits here)
  *   2. Code defaults (lib/content/defaults.ts)
  *
- * Case studies: any case study with "Homepage" toggled on, newest first.
- * Falls back to the built-in defaults if none are toggled on yet.
+ * Case studies: any published case study with "Homepage" toggled on,
+ * newest first. None toggled on means the teaser section is hidden.
  */
 export async function getMergedContent(): Promise<SiteContent> {
   const [sanity, featured] = await Promise.all([
@@ -270,7 +374,11 @@ export async function getMergedContent(): Promise<SiteContent> {
     getFeaturedCaseStudies("homepage").catch(() => []),
   ]);
   const merged = overlaySanity(defaultContent, sanity);
-  if (featured.length) merged.caseStudies = featured;
+  // Assigned unconditionally: no featured case studies means the teaser
+  // section hides itself, which is correct. Falling back to placeholder
+  // content here would put case studies on the homepage that don't exist
+  // on /case-studies and can't be removed from the Studio.
+  merged.caseStudies = featured;
   return merged;
 }
 
@@ -279,7 +387,8 @@ export async function getMergedContent(): Promise<SiteContent> {
  *   1. Sanity "New Sellers Page" document (client edits here)
  *   2. Static defaults tailored to this audience (lib/content/newSellerDefaults.ts)
  *
- * Case studies: any case study with "New Sellers Page" toggled on.
+ * Case studies: any published case study with "New Sellers Page"
+ * toggled on. None toggled on means the teaser section is hidden.
  */
 export async function getMergedNewSellerContent(): Promise<SiteContent> {
   const [sanity, featured] = await Promise.all([
@@ -287,7 +396,7 @@ export async function getMergedNewSellerContent(): Promise<SiteContent> {
     getFeaturedCaseStudies("newSellerPage").catch(() => []),
   ]);
   const merged = overlaySanity(newSellerDefaults, sanity);
-  if (featured.length) merged.caseStudies = featured;
+  merged.caseStudies = featured; // see the note in getMergedContent above
   return merged;
 }
 
@@ -332,4 +441,18 @@ export async function getMergedFooter(): Promise<FooterContent> {
     // deliberate override, not a reason to fall back to the default.
     chatWidgetId: f.chatWidgetId !== undefined ? f.chatWidgetId : footerDefaults.chatWidgetId,
   };
+}
+
+export type LeadFormPage = "homepage" | "newSellerPage";
+
+/**
+ * The lead form config for one page, resolved exactly as the rendered
+ * form resolves it. POST /api/leads uses this to work out which questions
+ * were legitimately asked, where each answer belongs in GoHighLevel, and
+ * which tags to apply — none of which is taken from the request body.
+ */
+export async function getMergedLeadForm(page: LeadFormPage): Promise<LeadFormContent> {
+  const base = page === "newSellerPage" ? newSellerDefaults.leadForm : defaultContent.leadForm;
+  const sanity = await getLeadForm(page).catch(() => null);
+  return resolveLeadForm(base, sanity ?? undefined);
 }
