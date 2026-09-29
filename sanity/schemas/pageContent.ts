@@ -1,4 +1,5 @@
 import { ICON_OPTIONS } from "../../lib/icons";
+import { questionsHelp, ghlFieldHelp, tagsHelp } from "./leadFormHelp";
 
 // sanity/schemas/pageContent.ts
 //
@@ -577,25 +578,28 @@ export const pageContent = {
       group: "leadForm",
       options: { collapsible: false },
       fields: [
-        { name: "nameLabel", title: "\"Name\" field label", type: "string" },
-        { name: "namePlaceholder", title: "\"Name\" field placeholder", type: "string" },
-        { name: "emailLabel", title: "\"Email\" field label", type: "string" },
-        { name: "emailPlaceholder", title: "\"Email\" field placeholder", type: "string" },
+        { name: "nameLabel", title: "\"Name\" field label", type: "string",
+          description: "The label above the box, e.g. \"Name\". Always visible." },
+        { name: "namePlaceholder", title: "\"Name\" field placeholder", type: "string",
+          description: "The faint hint inside the empty box, e.g. \"Your name\". Disappears as they type." },
+        { name: "emailLabel", title: "\"Email\" field label", type: "string",
+          description: "The label above the box, e.g. \"Email\". Always visible." },
+        { name: "emailPlaceholder", title: "\"Email\" field placeholder", type: "string",
+          description: "The faint hint inside the empty box, e.g. \"you@brand.com\". Disappears as they type." },
 
         // ── THE QUESTIONS ──────────────────────────────────────────────
         {
           name: "fields",
           title: "Questions",
           type: "array",
-          description:
-            "Everything the form asks below Name and Email. Add, remove and drag to reorder freely — each page has its own list, so the New Sellers page can ask completely different questions from the homepage. " +
-            "Leave this empty to fall back to the three built-in dropdowns (revenue, products, budget).",
+          description: questionsHelp,
           of: [{
             type: "object",
             name: "leadFormField",
             fields: [
               { name: "label", title: "Question", type: "string",
-                description: 'The label above the field, e.g. "Monthly Revenue on Amazon"',
+                description:
+                  'The small label shown ABOVE the box, and always visible — this is the question itself, e.g. "Monthly Revenue on Amazon".',
                 validation: (R: any) => R.required() },
               {
                 name: "type",
@@ -623,9 +627,10 @@ export const pageContent = {
                       ? "A dropdown needs at least one choice."
                       : true,
                   ) },
-              { name: "placeholder", title: "Placeholder (grey hint text)", type: "string",
+              { name: "placeholder", title: "Placeholder (hint inside the box)", type: "string",
                 hidden: ({ parent }: any) => parent?.type === "dropdown",
-                description: 'Optional, e.g. "+1 555 0100". Dropdowns don\'t use this.' },
+                description:
+                  'Optional faint grey example text INSIDE the empty box, e.g. "+1 555 0100". It disappears as soon as they start typing, so never put anything important here — that belongs in the Question above. Leave blank for no hint. Dropdowns don\'t use this.' },
               { name: "required", title: "Required?", type: "boolean", initialValue: true,
                 description: "On: the form won't submit until this is answered." },
               {
@@ -646,8 +651,7 @@ export const pageContent = {
               },
               { name: "ghlField", title: "GoHighLevel custom field key", type: "string",
                 hidden: ({ parent }: any) => parent?.target !== "customField",
-                description:
-                  'The field\'s key in GoHighLevel → Settings → Custom Fields, e.g. "monthly_amazon_revenue". The field must already exist there, and the key has to match exactly — if it doesn\'t, the answer still reaches the contact\'s note, it just won\'t fill the field.',
+                description: ghlFieldHelp,
                 validation: (R: any) =>
                   R.custom((key: string | undefined, ctx: any) =>
                     ctx.parent?.target === "customField" && !key?.trim()
@@ -701,10 +705,7 @@ export const pageContent = {
         // ── WHAT HAPPENS IN GOHIGHLEVEL ────────────────────────────────
         { name: "tags", title: "Tags added in GoHighLevel", type: "array",
           of: [{ type: "string" }],
-          description:
-            "Applied to the contact on every submission from this page — this is what your GoHighLevel workflows should trigger off. " +
-            "Each page has its own list, so you can tag homepage leads and New Sellers leads differently. " +
-            "Leave empty to use the built-in tags (\"website-lead\", \"strategy-call-request\")." },
+          description: tagsHelp },
         { name: "source", title: "Lead source recorded in GoHighLevel", type: "string",
           description: 'Shows on the contact as its source, e.g. "Website — New Sellers Page". Leave blank for the built-in default.' },
         { name: "opportunityName", title: "Pipeline deal name", type: "string",
