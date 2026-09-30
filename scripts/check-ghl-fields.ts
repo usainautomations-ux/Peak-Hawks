@@ -31,6 +31,9 @@ import { getMergedLeadForm, type LeadFormPage } from "@/lib/content/merged";
 import { getLeadForm } from "@/lib/sanity/queries";
 import type { LeadFormContent } from "@/lib/content/defaults";
 import { ghlFetch, getLocationId, GHLError } from "@/lib/ghl/client";
+// Shared with the live submit path so the two can never disagree about
+// what counts as a match.
+import { bareFieldKey as bareKey } from "@/lib/ghl/customFields";
 import type { LeadFormField } from "@/lib/content/defaults";
 
 const PAGES: { id: LeadFormPage; label: string }[] = [
@@ -44,16 +47,6 @@ type GHLCustomField = {
   fieldKey?: string;
   dataType?: string;
 };
-
-/**
- * GoHighLevel reports a field's key as `contact.monthly_amazon_revenue`,
- * while the site stores and sends the bare `monthly_amazon_revenue`.
- * Compare on the bare form so the two line up either way — and so pasting
- * the prefixed version into Sanity doesn't read as a false mismatch here.
- */
-function bareKey(key: string): string {
-  return key.trim().replace(/^contact\./, "").toLowerCase();
-}
 
 async function fetchGhlFields(): Promise<GHLCustomField[]> {
   const locationId = getLocationId();

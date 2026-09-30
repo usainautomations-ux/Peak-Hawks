@@ -6,6 +6,7 @@ import {
   addContactNote,
 } from "@/lib/ghl/crm";
 import { GHLError } from "@/lib/ghl/client";
+import { resolveCustomFields } from "@/lib/ghl/customFields";
 import { getMergedLeadForm, type LeadFormPage } from "@/lib/content/merged";
 import type { LeadFormContent } from "@/lib/content/defaults";
 import { rateLimited, getClientIp } from "@/lib/rateLimit";
@@ -117,6 +118,24 @@ export async function POST(req: Request) {
 
   const [firstName, ...rest] = data.name.trim().split(/\s+/);
 
+  // Resolve each answer's field key to its GoHighLevel id before writing.
+  // Sending a key alone is silently dropped when it doesn't match a real
+  // field — the contact saves, the field stays empty, and nothing reports
+  // it. Resolving first also lets us say exactly which key is wrong.
+  const { resolved, unresolved, lookupFailed } = await resolveCustomFields(
+    collected.customFields,
+  );
+
+  if (unresolved.length) {
+    console.warn(
+      `[leads] no GoHighLevel custom field matches ${unresolved
+        .map((k) => `"${k}"`)
+        .join(", ")} — those answers are on the contact's note only. ` +
+        "Create the field in GoHighLevel and paste its key into Sanity → Lead Form → Questions, " +
+        "or run: npm run check:ghl-fields",
+    );
+  }
+
   try {
     const contact = await upsertContact({
       firstName,
@@ -125,9 +144,10 @@ export async function POST(req: Request) {
       phone: collected.phone,
       source: config.source,
       tags: config.tags,
-      // These keys must exist in GHL: Settings → Custom Fields. They're set
-      // per question in Sanity → Lead Form → Questions.
-      customFields: collected.customFields,
+      // Each carries the field's id where it could be resolved, since that
+      // is what GoHighLevel matches on. Keys are set per question in
+      // Sanity → Lead Form → Questions.
+      customFields: resolved,
     });
 
     // Everything below is best-effort: a misconfigured pipeline or a
@@ -159,6 +179,12 @@ export async function POST(req: Request) {
     } catch (err) {
       console.error("[leads] opportunity creation failed", err);
     }
+
+    console.log(
+      `[leads] ${data.page}: contact ${contact.id}, ` +
+        `${resolved.length - unresolved.length}/${resolved.length} custom field(s) mapped` +
+        (lookupFailed ? " (field lookup unavailable — sent by key)" : ""),
+    );
 
     return NextResponse.json({ ok: true, contactId: contact.id });
   } catch (err) {
