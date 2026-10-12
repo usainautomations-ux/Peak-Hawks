@@ -39,16 +39,26 @@ mkdir -p "$OUT_DIR"
 STAMP="$(date -u +%Y-%m-%dT%H-%M-%SZ)"
 OUT_FILE="$OUT_DIR/sanity-${DATASET}-${STAMP}.tar.gz"
 
+# The CLI only runs `dataset` commands inside a real project: it needs
+# sanity.cli.ts (at the repo root) AND `sanity` resolvable in node_modules.
+# A standalone `npx --yes sanity@x` copy fails with "not available outside of
+# a Sanity project context".
+if [ ! -x node_modules/.bin/sanity ]; then
+  echo "error: sanity CLI not found in node_modules." >&2
+  echo "Run 'npm install' (or 'npm ci') first." >&2
+  exit 1
+fi
+
 echo "Exporting Sanity project $PROJECT_ID / dataset $DATASET ..."
 
 # --asset-concurrency keeps us well under Sanity's rate limits on the free plan.
-SANITY_AUTH_TOKEN="$SANITY_API_TOKEN" npx --yes sanity@4.22.0 dataset export "$DATASET" "$OUT_FILE" \
-  --project "$PROJECT_ID" \
+# projectId/dataset come from sanity.cli.ts, which reads the same env vars.
+SANITY_AUTH_TOKEN="$SANITY_API_TOKEN" node_modules/.bin/sanity dataset export "$DATASET" "$OUT_FILE" \
   --asset-concurrency 4
 
 echo
 echo "Wrote $OUT_FILE ($(du -h "$OUT_FILE" | cut -f1))"
 echo
 echo "To restore into a fresh dataset:"
-echo "  SANITY_AUTH_TOKEN=<editor-token> npx sanity@4.22.0 dataset import \\"
-echo "    $OUT_FILE <target-dataset> --project $PROJECT_ID --replace"
+echo "  SANITY_AUTH_TOKEN=<editor-token> node_modules/.bin/sanity dataset import \\"
+echo "    $OUT_FILE <target-dataset> --replace"

@@ -32,6 +32,7 @@ the gap worth closing, not the GitHub one.
 Run it any time, locally:
 
 ```bash
+npm install                         # the sanity CLI must be a local dependency
 ./scripts/backup-sanity.sh          # writes backups/sanity-production-<timestamp>.tar.gz
 ```
 
@@ -44,8 +45,8 @@ once:
 1. Repo → Settings → Secrets and variables → Actions
 2. **Secret** `SANITY_API_TOKEN` — a Viewer token from
    [sanity.io/manage](https://sanity.io/manage) → API → Tokens
-3. **Variables** `NEXT_PUBLIC_SANITY_PROJECT_ID` = `v84q7t2g`,
-   `NEXT_PUBLIC_SANITY_DATASET` = `production`
+3. **Variables** `NEXT_PUBLIC_SANITY_PROJECT_ID` (the id shown on the project's
+   settings page), `NEXT_PUBLIC_SANITY_DATASET` = `production`
 
 That alone gives you a downloadable export in the Actions tab. Because
 artifacts are capped at 90 days, also add storage you own for the long-term
@@ -61,10 +62,12 @@ you get to it.
 ### Restoring
 
 ```bash
-SANITY_AUTH_TOKEN=<editor-token> npx sanity@4.22.0 dataset import \
-  backups/sanity-production-<timestamp>.tar.gz production \
-  --project v84q7t2g --replace
+SANITY_AUTH_TOKEN=<editor-token> node_modules/.bin/sanity dataset import \
+  backups/sanity-production-<timestamp>.tar.gz production --replace
 ```
+
+Run it from the repo root: the CLI reads the project id from `sanity.cli.ts`
+and refuses to run `dataset` commands anywhere else.
 
 Import into a scratch dataset first (`--replace` into `production` overwrites
 live content). Test a restore once, now, while nothing is on fire — an untested
