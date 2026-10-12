@@ -364,3 +364,14 @@ If the client ends up editing case studies weekly and finds the JSON awkward,
 move *just those* collections to Sanity or Payload and keep GHL for
 leads/bookings/automations. The content layer in `lib/ghl/content.ts` is
 isolated behind `getSiteContent()`, so swapping the source is a one-file change.
+
+---
+
+## 8. Backups & disaster recovery
+
+The Sanity dataset is the only copy of the site's content — the repo holds
+schemas, not copy. `./scripts/backup-sanity.sh` exports documents and assets to
+a single archive, and `.github/workflows/sanity-backup.yml` does it weekly.
+
+See **[DISASTER_RECOVERY.md](./DISASTER_RECOVERY.md)** for setup, restore steps,
+and what actually survives if GitHub, Vercel, or Sanity goes away.

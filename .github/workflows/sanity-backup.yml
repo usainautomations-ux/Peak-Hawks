@@ -1,0 +1,63 @@
+name: Sanity content backup
+
+# The Sanity dataset holds every word of site copy and every uploaded image.
+# The repo holds none of it. This takes a full export on a schedule so there
+# is always a second copy we control.
+on:
+  schedule:
+    # 03:14 UTC every Monday (off-the-hour so it isn't queued behind the
+    # thundering herd of :00 cron jobs).
+    - cron: "14 3 * * 1"
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # Lifted to job level so the "copy to object storage" step can test it
+      # in an `if:` — the secrets context isn't readable from a step `if`.
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Export dataset
+        env:
+          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ vars.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: ${{ vars.NEXT_PUBLIC_SANITY_DATASET }}
+        run: ./scripts/backup-sanity.sh backups
+
+      # Artifacts are capped at 90 days of retention — fine as a convenience
+      # copy, NOT as the long-term archive. Set the S3/R2 secrets below for
+      # that.
+      - name: Upload as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-export
+          path: backups/*.tar.gz
+          retention-days: 90
+
+      # Optional but recommended: a copy that outlives the 90-day artifact
+      # window, in storage you own. Works with AWS S3 or any S3-compatible
+      # bucket (Cloudflare R2, Backblaze B2, DigitalOcean Spaces).
+      # Skipped automatically until S3_BUCKET is set.
+      - name: Copy to object storage
+        if: env.S3_BUCKET != ''
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.S3_REGION || 'auto' }}
+          S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+        run: |
+          set -euo pipefail
+          args=()
+          if [ -n "${S3_ENDPOINT:-}" ]; then
+            args+=(--endpoint-url "$S3_ENDPOINT")
+          fi
+          aws "${args[@]}" s3 cp backups/ "s3://$S3_BUCKET/sanity/" \
+            --recursive --exclude "*" --include "*.tar.gz"
